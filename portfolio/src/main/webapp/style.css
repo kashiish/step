@@ -11,3 +11,22 @@ body {
     background-repeat: no-repeat;
     background-size:cover;
 }
+
+#heading {
+    text-align: left;
+    color: white;
+    font-family: 'Slabo 27px', serif;
+}
+
+#name {
+    margin: 0;
+    margin-top: 15px;
+    font-size: 75px;
+    line-height: 70px;
+}
+
+#title {
+    margin: 0;
+    font-size: 25px;
+    margin-bottom: 5px;
+}
