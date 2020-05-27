@@ -30,3 +30,8 @@ body {
     font-size: 25px;
     margin-bottom: 5px;
 }
+
+.social-icon {
+    width: 1.5%;
+    padding-right: 5px;
+}
