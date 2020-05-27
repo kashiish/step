@@ -35,3 +35,10 @@ body {
     width: 1.5%;
     padding-right: 5px;
 }
+
+#bitmoji {
+    position:absolute;
+    right: 0;
+    bottom: 0;
+    width: 10%;
+}
