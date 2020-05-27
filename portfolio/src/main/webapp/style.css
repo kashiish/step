@@ -5,16 +5,17 @@ html, body {
 }
 
 body {
-    background-image: url("/images/flower-2.jpg");
+    background-image: url("/images/ocean-2.jpg");
 
-    background-position: center;
+    /* background-position: center; */
     background-repeat: no-repeat;
-    background-size:cover;
+    background-size:50% 100%;
+    background-position: right top;
 }
 
 #heading {
     text-align: left;
-    color: white;
+    color: #5D5D5D;
     font-family: 'Slabo 27px', serif;
 }
 
