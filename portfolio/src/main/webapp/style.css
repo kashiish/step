@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Slabo+27px&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bellota+Text&display=swap');
 
 html, body {
     height: 100%;
@@ -11,6 +12,7 @@ body {
     background-size:50% 100%;
     background-position: right top;
     margin: 0;
+    font-family: 'Bellota Text', cursive;
 }
 
 #left {
@@ -35,7 +37,7 @@ body {
 #heading {
     text-align: left;
     color: #5D5D5D;
-    font-family: 'Slabo 27px', serif;
+    font-family: 'Bellota Text', cursive;
 }
 
 #name {
@@ -63,7 +65,6 @@ body {
 }
 
 #about-me {
-    font-family: 'Slabo 27px', serif;
     color: #5D5D5D;
 }
 
@@ -92,4 +93,20 @@ body {
 
 .right-align {
     text-align: right;
+}
+
+#projects {
+    text-align: center;
+}
+
+.project {
+    border: 2px solid #5D5D5D;
+    border-radius: 30px;
+    padding: 2%;
+    font-size: 40px;
+    margin: 8%;
+}
+
+a {
+    text-decoration: none;
 }
