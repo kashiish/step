@@ -7,11 +7,12 @@ html, body {
 body {
     background-image: url("/images/ocean-2.jpg");
 
-    /* background-position: center; */
     background-repeat: no-repeat;
     background-size:50% 100%;
     background-position: right top;
+    margin: 0;
 }
+
 
 #heading {
     text-align: left;
@@ -21,7 +22,6 @@ body {
 
 #name {
     margin: 0;
-    margin-top: 15px;
     font-size: 75px;
     line-height: 70px;
 }
@@ -42,4 +42,9 @@ body {
     right: 0;
     bottom: 0;
     width: 10%;
+}
+
+#about-me {
+    font-family: 'Slabo 27px', serif;
+    color: #5D5D5D;
 }
