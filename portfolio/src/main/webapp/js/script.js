@@ -26,6 +26,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //Switches the project description and image to the project that was clicked on. 
 function switchProject(elem) {
-    let classes = elem.getAttribute('class');
-
+    //get the name of the project that was clicked
+    var project = elem.innerText;
+    //get the current project that we see
+    var currentActiveProj = document.getElementsByClassName("active-proj")[0];
+    var currentActiveProjLink = document.getElementsByClassName("active")[0];
+    //remove the active/active-proj classes from the project that we currently see
+    //the active/active-proj classes determine whether or not we can see the element
+    currentActiveProj.classList.remove("active-proj");
+    currentActiveProjLink.classList.remove("active");
+    //get the project description/image that we clicked on
+    var nextActiveProj = document.getElementById(project);
+    //add the active/active-proj classes to the project we clicked so we can see the description/image
+    elem.classList.add("active");
+    nextActiveProj.classList.add("active-proj");
 }

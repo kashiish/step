@@ -52,25 +52,53 @@
                     <img src="images/spring-rolls.JPG" class="circle z-depth-3"/>
                     <img src="images/elephant-2.JPG" class="circle z-depth-3"/>
                 </div>
+                <img id="bitmoji" src="images/bitmoji.png"/>   
             </div>
-        </div>
-        <img id="bitmoji" src="images/bitmoji.png"/>    
+        </div> 
         <div class="parallax-container">
             <div class="parallax"><img src="images/trees.jpg"></div>
         </div>
         <div id="projects" class="section white">
             <div class="row container">
-                <h2 class="header">My Projects</h2>
+                <h2 class="header">Projects</h2>
                 <div id="projects">
                     <div class="collection column">
-                        <a href="#!" class="collection-item" onclick="switchProject(this)">recyclebot</a>
                         <a href="#!" class="collection-item active" onclick="switchProject(this)">presto</a>
+                        <a href="#!" class="collection-item" onclick="switchProject(this)">recyclebot</a>
                         <a href="#!" class="collection-item" onclick="switchProject(this)">politwitical</a>
                         <a href="#!" class="collection-item" onclick="switchProject(this)">time.ly</a>
                     </div>
-                    <div class="project column">
-                        <h5 id="project-title">recyclebot</h5>
-                        <img src="images/recyclebot.JPG"/>
+                    <div id="presto" class="project column active-proj">
+                        <div class="project-description column">
+                            <h5>presto</h5>
+                            <p>Presto is a simple vegan & vegetarian recipe search engine created using React.</p>
+                            <p>Checkout presto <a href="https://kashiish.github.io/presto/" target="_blank">here</a>.</p>
+                        </div>
+                        <img class="column" src="images/presto.png"/>
+                    </div>
+                    <div id="recyclebot" class="project column">
+                        <div class="project-description column">
+                            <h5>recyclebot</h5>
+                            <p>RecycleBot is an automated waste sorter that recycles for you!</p>
+                            <p>Click <a href="https://sites.google.com/corp/umass.edu/recyclebot/home" target="_blank">here</a> to see it in action.</p>
+                        </div>
+                        <img class="column" src="images/recyclebot.jpg"/>
+                    </div>
+                    <div id="politwitical" class="project column">
+                        <div class="project-description column">
+                            <h5>politwitical</h5>
+                            <p>Politwitical is a web app that displays the most tweeted political words/hashtags at the current moment in time.</p>
+                            <p>Checkout politwitical <a href="http://kashiiish.pythonanywhere.com/" target="_blank">here</a>.</p>
+                        </div>
+                        <img class="column" src="images/politwitical.png"/>
+                    </div>
+                    <div id="time.ly" class="project column">
+                        <div class="project-description column">
+                            <h5>time.ly</h5>
+                            <p>time.ly is a Chrome Extension used to monitor the amount of time wasted on distracting websites while you're working.</p>
+                            <p>Checkout time.ly <a href="https://chrome.google.com/webstore/detail/timely/pjdfajhengmbcfdchimnhgbkdednlfml" target="_blank">here</a>.</p>
+                        </div>
+                        <img class="column" src="images/timely.png"/>
                     </div>
                 </div>
             </div>

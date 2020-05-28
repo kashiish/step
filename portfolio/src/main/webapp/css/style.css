@@ -32,7 +32,7 @@ html, body {
 }
 
 #bitmoji {
-    position:absolute;
+    position: fixed;
     right: 0;
     bottom: 0;
     width: 10%;
@@ -44,6 +44,31 @@ html, body {
 
 .sidenav .user-view .email {
     padding-bottom: 0 !important;
+}
+
+.column {
+    width: 50% !important;
+    float:left;
+}
+
+.project {
+    display: none;
+    margin: 0.5rem 0 1rem 0;
+}
+
+.active-proj {
+    display: block;
+}
+
+.project img {
+    /* padding: 3%; */
+    width: 38% !important;
+}
+
+
+.project-description {
+    display: inline-block;
+    padding: 3%;
 }
 
 .collection a.collection-item {
