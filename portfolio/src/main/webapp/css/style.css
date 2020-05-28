@@ -2,16 +2,16 @@
 
 html, body {
     height: 100%;
+    font-family: 'Bellota Text', cursive;
 }
 
 #nav-icon {
-    width: 30px;
-    margin: 10px;
+    margin: 30%;
 }
 
-.header {
+/* .header {
     font-family: 'Bellota Text', cursive;
-}
+} */
 
 #sidenav-link {
     position:fixed;
@@ -44,4 +44,9 @@ html, body {
 
 .sidenav .user-view .email {
     padding-bottom: 0 !important;
+}
+
+.collection a.collection-item {
+    padding: 3% !important;
+    font-size: 2vh;
 }

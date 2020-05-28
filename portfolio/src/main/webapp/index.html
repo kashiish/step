@@ -30,10 +30,10 @@
                     </div>
             </div></li>
             <li><a href="#intro" class="sidenav-close">Intro</a></li>
-            <li><a href="#!" class="sidenav-close">Projects</a></li>
+            <li><a href="#projects" class="sidenav-close">Projects</a></li>
             <li><div class="divider"></div></li>
         </ul>
-        <a href="#" data-target="slide-out" class="sidenav-trigger" id="sidenav-link"><img id="nav-icon" src="images/sidebar.png"/></a>
+        <a href="#" data-target="slide-out" class="sidenav-trigger" id="sidenav-link"><i class="material-icons" id="nav-icon">menu</i></a>
         <div class="parallax-container">
             <div class="parallax"><img src="images/flower-3.jpg"></div>
         </div>
@@ -55,6 +55,26 @@
             </div>
         </div>
         <img id="bitmoji" src="images/bitmoji.png"/>    
+        <div class="parallax-container">
+            <div class="parallax"><img src="images/trees.jpg"></div>
+        </div>
+        <div id="projects" class="section white">
+            <div class="row container">
+                <h2 class="header">My Projects</h2>
+                <div id="projects">
+                    <div class="collection column">
+                        <a href="#!" class="collection-item" onclick="switchProject(this)">recyclebot</a>
+                        <a href="#!" class="collection-item active" onclick="switchProject(this)">presto</a>
+                        <a href="#!" class="collection-item" onclick="switchProject(this)">politwitical</a>
+                        <a href="#!" class="collection-item" onclick="switchProject(this)">time.ly</a>
+                    </div>
+                    <div class="project column">
+                        <h5 id="project-title">recyclebot</h5>
+                        <img src="images/recyclebot.JPG"/>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script type="text/javascript" src="js/materialize.js"></script>
   </body>

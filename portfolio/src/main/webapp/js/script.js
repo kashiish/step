@@ -22,4 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.sidenav');
     var instances = M.Sidenav.init(elems);
-  });
+});
+
+//Switches the project description and image to the project that was clicked on. 
+function switchProject(elem) {
+    let classes = elem.getAttribute('class');
+
+}
