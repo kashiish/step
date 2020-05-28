@@ -4,8 +4,20 @@ html, body {
     height: 100%;
 }
 
+#nav-icon {
+    width: 30px;
+    margin: 10px;
+}
+
 .header {
     font-family: 'Bellota Text', cursive;
+}
+
+#sidenav-link {
+    position:fixed;
+    top:0;
+    left:0;
+    z-index: 1;
 }
 
 #intro-images {
@@ -24,4 +36,12 @@ html, body {
     right: 0;
     bottom: 0;
     width: 10%;
+}
+
+.social-icon {
+    width: 10%;
+}
+
+.sidenav .user-view .email {
+    padding-bottom: 0 !important;
 }
