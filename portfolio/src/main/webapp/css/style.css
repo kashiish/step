@@ -75,3 +75,10 @@ html, body {
     padding: 3% !important;
     font-size: 2vh;
 }
+
+#submit-button {
+    clear: both;
+    display: inherit;
+    position: relative;
+    top: 10px;
+}
