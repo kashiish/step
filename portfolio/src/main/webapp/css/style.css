@@ -20,13 +20,13 @@ html, body {
     z-index: 1;
 }
 
-#intro-images {
+#about-images {
     display: inline-block;
     width: 100%;
     text-align: center;
 }
 
-#intro-images img {
+#about-images img {
     width: 20%;
     margin: 2%;
 }
