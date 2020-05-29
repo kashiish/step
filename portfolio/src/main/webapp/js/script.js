@@ -41,3 +41,13 @@ function switchProject(elem) {
     elem.classList.add("active");
     nextActiveProj.classList.add("active-proj");
 }
+
+//TEMPORARY
+//This function is called when a user submits the contact form. It opens the user's mail client
+//with my email in the 'to' field, a subject, and the message they filled in the form. 
+//Referenced from: https://stackoverflow.com/questions/7381150/how-to-send-an-email-from-javascript
+//After we create a server in week 3, I hope to use that to send an email from the user instead of opening the user's mail client
+function sendEmail() {
+    var sender = document.getElementById("icon-name").value;
+    window.open("mailto:kashisharora@google.com?subject=Hello from " + sender + "!&body=" + document.getElementById("icon-message").value);
+}
