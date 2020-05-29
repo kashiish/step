@@ -87,4 +87,9 @@ html, body {
 
 .chip {
     margin-right: 10px !important;
+#submit-button {
+    clear: both;
+    display: inherit;
+    position: relative;
+    top: 10px;
 }
