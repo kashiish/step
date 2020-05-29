@@ -3,25 +3,111 @@
   <head>
     <meta charset="UTF-8">
     <title>Kashish's Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="js/script.js"></script>
   </head>
   <body>
     <div id="content">
-        <div id="heading">
-            <h1 id="name">Kashish Arora</h1>
-            <h3 id="title">STEP Intern</h3>
-            <div id="social">
-                <a href="https://www.linkedin.com/in/kashish-a/" target="_blank">
-                    <img class="social-icon" src="images/linkedin.png"/>
-                </a>
+        <ul id="slide-out" class="sidenav">
+            <li><div class="user-view">
+                    <div class="background">
+                        <img src="images/sky.jpg"/>
+                    </div>
+                    <a href="#user"><img class="circle" src="images/kashish.JPG"></a>
+                    <a href="#name"><span class="white-text name">Kashish Arora</span></a>
+                    <a href="#email"><span class="white-text email">kashisharora@google.com</span></a>
+                    <div id="social">
+                        <a href="https://www.linkedin.com/in/kashish-a/" target="_blank">
+                            <img class="social-icon" src="images/linkedin.png"/>
+                        </a>
 
-                <a href="https://github.com/kashiish" target="_blank">
-                    <img class="social-icon" src="images/github.png"/>
-                </a>
+                        <a href="https://github.com/kashiish" target="_blank">
+                            <img class="social-icon" src="images/github.png"/>
+                        </a>
+                    </div>
+            </div></li>
+            <li><a href="#about" class="sidenav-close">About</a></li>
+            <li><a href="#projects" class="sidenav-close">Projects</a></li>
+            <li><a href="#contact" class="sidenav-close">Contact</a></li>
+            <li><div class="divider"></div></li>
+        </ul>
+        <a href="#" data-target="slide-out" class="sidenav-trigger" id="sidenav-link"><i class="material-icons" id="nav-icon">menu</i></a>
+        <div class="parallax-container">
+            <div class="parallax"><img src="images/flower-3.jpg"></div>
+        </div>
+        <div id="about" class="section white">
+            <div class="row container">
+                <h2 class="header">Kashish Arora</h2>
+                <p class="grey-text text-darken-3 lighten-3">Hello, world!</p>
+                <p class="grey-text text-darken-3 lighten-3">My name is Kashish and I am an incoming junior computer science major at UMass Amherst.
+                    I'm really passionate about creating technology and using it to better myself and others. I am currently working as a 
+                    STEP Intern at Google (remotely!) and am really excited to work on this portfolio throughout the summer!
+                    Besides school and work, I enjoy spending time with my dog, cooking for my family, and traveling.
+                </p>
+                <div id="about-images">
+                    <img src="images/kayak.JPG" class="circle z-depth-3"/>
+                    <img src="images/canal.JPG" class="circle z-depth-3"/>
+                    <img src="images/spring-rolls.JPG" class="circle z-depth-3"/>
+                    <img src="images/elephant-2.JPG" class="circle z-depth-3"/>
+                </div>
+                <img id="bitmoji" src="images/bitmoji.png"/>   
+            </div>
+        </div> 
+        <div class="parallax-container">
+            <div class="parallax"><img src="images/trees.jpg"></div>
+        </div>
+        <div id="projects" class="section white">
+            <div class="row container">
+                <h2 class="header">Projects</h2>
+                <div id="projects">
+                    <div class="column">
+                        <div class="collection">
+                            <a href="#!" class="collection-item active" onclick="switchProject(this)">presto</a>
+                            <a href="#!" class="collection-item" onclick="switchProject(this)">recyclebot</a>
+                            <a href="#!" class="collection-item" onclick="switchProject(this)">politwitical</a>
+                            <a href="#!" class="collection-item" onclick="switchProject(this)">time.ly</a>
+                        </div>
+                        <p>Checkout more projects on my <a href="https://github.com/kashiish">GitHub</a>.</p>
+                    </div>
+                    <div id="presto" class="project column active-proj">
+                        <div class="project-description column">
+                            <h5>presto</h5>
+                            <p>Presto is a simple vegan & vegetarian recipe search engine created using React.</p>
+                            <p>Checkout presto <a href="https://kashiish.github.io/presto/" target="_blank">here</a>.</p>
+                        </div>
+                        <img class="column" src="images/presto.png"/>
+                    </div>
+                    <div id="recyclebot" class="project column">
+                        <div class="project-description column">
+                            <h5>recyclebot</h5>
+                            <p>RecycleBot is an automated waste sorter that recycles for you!</p>
+                            <p>Click <a href="https://sites.google.com/corp/umass.edu/recyclebot/home" target="_blank">here</a> to see it in action.</p>
+                        </div>
+                        <img class="column" src="images/recyclebot.jpg"/>
+                    </div>
+                    <div id="politwitical" class="project column">
+                        <div class="project-description column">
+                            <h5>politwitical</h5>
+                            <p>Politwitical is a web app that displays the most tweeted political words/hashtags at the current moment in time.</p>
+                            <p>Checkout politwitical <a href="http://kashiiish.pythonanywhere.com/" target="_blank">here</a>.</p>
+                        </div>
+                        <img class="column" src="images/politwitical.png"/>
+                    </div>
+                    <div id="time.ly" class="project column">
+                        <div class="project-description column">
+                            <h5>time.ly</h5>
+                            <p>time.ly is a Chrome Extension used to monitor the amount of time wasted on distracting websites while you're working.</p>
+                            <p>Checkout time.ly <a href="https://chrome.google.com/webstore/detail/timely/pjdfajhengmbcfdchimnhgbkdednlfml" target="_blank">here</a>.</p>
+                        </div>
+                        <img class="column" src="images/timely.png"/>
+                    </div>
+                </div>
             </div>
         </div>
-        <img id="bitmoji" src="images/bitmoji.png"/>    
     </div>
+    <script type="text/javascript" src="js/materialize.js"></script>
   </body>
 </html>
