@@ -76,17 +76,21 @@ html, body {
     font-size: 2vh;
 }
 
+.work-icon {
+    margin-left: 2%;
+}
 .proficient .chip {
     font-size: 20px !important;
 }
 
 .proficient {
     margin-bottom: 1%;
-
 }
 
 .chip {
     margin-right: 10px !important;
+}
+
 #submit-button {
     clear: both;
     display: inherit;
