@@ -52,9 +52,9 @@
                     <img src="images/canal.JPG" class="circle z-depth-3"/>
                     <img src="images/spring-rolls.JPG" class="circle z-depth-3"/>
                     <img src="images/elephant-2.JPG" class="circle z-depth-3"/>
-                </div>
-                <img id="bitmoji" src="images/bitmoji.png"/>   
+                </div>   
             </div>
+        <img id="bitmoji" src="images/bitmoji.png"/>
         </div> 
         <div class="parallax-container">
             <div class="parallax"><img src="images/trees.jpg"></div>
@@ -107,6 +107,38 @@
                 </div>
             </div>
         </div>
+        <div class="parallax-container">
+            <div class="parallax"><img src="images/leaves.jpg"></div>
+        </div>
+        <div id="contact" class="section white">
+            <div class="row container">
+                <h2 class="header">Let's connect</h2>
+                <div class="row">
+                    <form class="col s12" name="contactForm">
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <i class="material-icons prefix">account_circle</i>
+                                <input id="icon-name" type="text" class="validate">
+                                <label for="icon-name">Name</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <i class="material-icons prefix">email</i>
+                                <input id="icon-email" type="email" class="validate">
+                                <label for="icon-email">Email</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <i class="material-icons prefix">edit</i>
+                                <textarea id="icon-message" class="materialize-textarea"></textarea>
+                                <label for="icon-message">Message</label>
+                            </div>
+                            <button id="submit-button" class="btn waves-effect waves-light" type="submit" name="action" onclick="sendEmail()">Submit
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </form>
+                </div>    
+            </div>
+        </div> 
     </div>
     <script type="text/javascript" src="js/materialize.js"></script>
   </body>
