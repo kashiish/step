@@ -75,3 +75,16 @@ html, body {
     padding: 3% !important;
     font-size: 2vh;
 }
+
+.proficient .chip {
+    font-size: 20px !important;
+}
+
+.proficient {
+    margin-bottom: 1%;
+
+}
+
+.chip {
+    margin-right: 10px !important;
+}
