@@ -54,7 +54,8 @@ function sendEmail() {
 
 //Requests content from DataServlet and adds it to the page.
 function sayHello() {
-    fetch('/data').then(response => response.text()).then((hello) => {
-    document.getElementById('hello-container').innerText = hello;
+    fetch('/data').then(response => response.json()).then((hello) => {
+    console.log(hello);
+    document.getElementById('message-container').innerText = hello;
   });
 }
