@@ -1,5 +1,7 @@
 package com.google.sps.data;
 
+import java.lang.String;
+
 public final class Comment {
 
     private final String name;
