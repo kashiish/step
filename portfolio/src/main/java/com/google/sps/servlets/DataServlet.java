@@ -40,10 +40,8 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Gson gson = new Gson();
-        String json = gson.toJson(comments);
         response.setContentType("application/json;");
-        response.getWriter().println(json);
+        response.getWriter().println(convertListToJson(comments));
     }
 
     @Override
@@ -65,6 +63,21 @@ public class DataServlet extends HttpServlet {
     
         response.sendRedirect("/index.html");
 
+    }
+    /**
+    * This method converts a list of comments to a JSON string.
+    * @return String, the list of comments as a JSON string
+    */
+    private String convertListToJson(ArrayList<Comment> comments) {
+        ArrayList<String> jsonComments = new ArrayList<String>();
+        Gson gson = new Gson();
+        //convert all Comment objects to JSON
+        for(Comment c : comments) {
+            jsonComments.add(gson.toJson(c));
+        }
+
+        //convert list to JSON
+        return gson.toJson(jsonComments);
     }
 
     /**
