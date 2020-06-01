@@ -43,11 +43,23 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        Comment comment = new Comment(request.getParameter("name"), request.getParameter("email"), request.getParameter("message"));
+        Comment comment = new Comment(getParameter(request, "name", ""), getParameter(request, "email", ""), getParameter(request, "message", ""));
 
         comments.add(comment);
         
         response.sendRedirect("/index.html");
 
     }
+
+    /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client
+   */
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
+  }
 }
