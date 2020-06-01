@@ -14,11 +14,13 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.Comment;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.String;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 
@@ -26,17 +28,13 @@ import java.util.ArrayList;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-    private ArrayList<String> messages;
+    private ArrayList<Comment> comments;
 
     @Override
     public void init() {
-        messages = new ArrayList<String>();
-
-        messages.add("Hello world!");
-        messages.add("Bonjour le monde!");
-        messages.add("Ciao mondo!");
+        comments = new ArrayList<Comment>();
     }
-    
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Gson gson = new Gson();
@@ -44,4 +42,28 @@ public class DataServlet extends HttpServlet {
         response.setContentType("application/json;");
         response.getWriter().println(json);
     }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        Comment comment = new Comment(getParameter(request, "name", ""), getParameter(request, "email", ""), getParameter(request, "message", ""));
+
+        comments.add(comment);
+        
+        response.sendRedirect("/index.html");
+
+    }
+
+    /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client
+   */
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
+  }
+
 }
