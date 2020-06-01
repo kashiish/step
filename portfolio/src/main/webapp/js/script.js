@@ -51,3 +51,10 @@ function sendEmail() {
     var sender = document.getElementById("icon-name").value;
     window.open("mailto:kashisharora@google.com?subject=Hello from " + sender + "!&body=" + document.getElementById("icon-message").value);
 }
+
+//Requests content from DataServlet and adds it to the page.
+function sayHello() {
+    fetch('/data').then(response => response.text()).then((hello) => {
+    document.getElementById('hello-container').innerText = hello;
+  });
+}
