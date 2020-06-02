@@ -31,8 +31,6 @@ import java.util.ArrayList;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-    private ArrayList<Comment> comments;
-
     @Override
     public void init() {
         comments = new ArrayList<Comment>();
@@ -47,14 +45,10 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        Comment comment = new Comment(getParameter(request, "name", ""), getParameter(request, "email", ""), getParameter(request, "message", ""));
-
-        // comments.add(comment);
-
         Entity commentEntity = new Entity("Comment");
-        commentEntity.setProperty("name", comment.getName());
-        commentEntity.setProperty("email", comment.getEmail());
-        commentEntity.setProperty("message", comment.getMessage());
+        commentEntity.setProperty("name", getParameter(request, "name", ""));
+        commentEntity.setProperty("email", getParameter(request, "email", ""));
+        commentEntity.setProperty("message", getParameter(request, "message", ""));
 
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
