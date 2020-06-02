@@ -113,7 +113,7 @@ html, body {
     float: right;
 }
 
-#max-comments {
+#max-comments-container {
     float: none;
     width: 20%;
 }
