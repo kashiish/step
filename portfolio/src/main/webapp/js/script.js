@@ -52,10 +52,9 @@ function sendEmail() {
     window.open("mailto:kashisharora@google.com?subject=Hello from " + sender + "!&body=" + document.getElementById("icon-message").value);
 }
 
-//Requests content from DataServlet and adds it to the page.
-function sayHello() {
-    fetch('/data').then(response => response.json()).then((hello) => {
-    console.log(hello);
-    document.getElementById('message-container').innerText = hello;
+//Requests comments from DataServlet and adds it to the page.
+function loadComments() {
+    fetch('/data').then(response => response.json()).then((comments) => {
+    document.getElementById('comment-container').innerText = comments;
   });
 }
