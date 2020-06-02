@@ -34,9 +34,11 @@ import java.util.ArrayList;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+    private final int MAX_COMMENTS_DEFAULT = 5;
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int maxComments = Integer.parseInt(getParameter(request, "max-comments", "10"));
+        int maxComments = getMaxCommentParam(request, response);
         Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -77,6 +79,33 @@ public class DataServlet extends HttpServlet {
         response.sendRedirect("/index.html");
 
     }
+
+    /**
+    * Gets the max-comments parameter to determine how many comments to fetch from Datastore. 
+    * @return int, if the user input was valid it returns the parameter, otherwise it returns the MAX_COMMENT_DEFAULT
+    */
+    private int getMaxCommentParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int maxComments;
+
+        try {
+            maxComments = Integer.parseInt(getParameter(request, "max-comments", "5"));
+            
+            //if user input is negative or 0
+            if(maxComments <= 0) {
+                response.getWriter().println("Invalid parameter.");
+                maxComments = MAX_COMMENTS_DEFAULT;
+            }
+
+        } catch(NumberFormatException e) {
+            //if user input is not a number
+            response.getWriter().println("Invalid parameter.");
+            maxComments = MAX_COMMENTS_DEFAULT;
+        }
+
+        return maxComments;
+    
+    }
+
     /**
     * This method converts a list of comments to a JSON string.
     * @return String, the list of comments as a JSON string
@@ -97,12 +126,12 @@ public class DataServlet extends HttpServlet {
    * @return the request parameter, or the default value if the parameter
    *         was not specified by the client
    */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
+    private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+        String value = request.getParameter(name);
+        if (value == null) {
+        return defaultValue;
+        }
+        return value;
     }
-    return value;
-  }
 
 }
