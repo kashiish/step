@@ -59,7 +59,7 @@ function switchProject(elem) {
 
 //Requests comments from DataServlet and adds it to the page.
 function loadComments() {
-    fetch('/data?max-comments=1').then(response => response.json()).then((comments) => {
+    fetch('/data?max-comments='+getSelectedMaxComments()).then(response => response.json()).then((comments) => {
     var commentContainer = document.getElementById('comment-container');
     //create a div element for each of the commments in the comments array
     var commentElems = comments.map(createCommentElem);
@@ -68,6 +68,12 @@ function loadComments() {
         commentContainer.appendChild(elem);
     });
   });
+}
+
+//Returns the selected option in the "Number of comments" select form.
+function getSelectedMaxComments() {
+    var select = document.getElementById("max-comments");
+    return select.options[select.selectedIndex].value;
 }
 
 // Creates a div element for a comment with a name, email, date, and message
