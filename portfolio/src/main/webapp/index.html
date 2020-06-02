@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script src="js/script.js"></script>
   </head>
-  <body onload="sayHello()">
+  <body onload="loadComments()">
     <div id="content">
         <ul id="slide-out" class="sidenav">
             <li><div class="user-view">
@@ -161,6 +161,7 @@
         <div id="contact" class="section white">
             <div class="row container">
                 <h2 class="header">Let's connect</h2>
+                <h6 style="margin-left:4px;">Leave a comment below!</h6>
                 <div class="row">
                     <form class="col s12" name="contactForm" action="/data" method="POST">
                         <div class="row">
@@ -179,13 +180,13 @@
                                 <textarea name="message" id="icon-message" class="materialize-textarea"></textarea>
                                 <label for="icon-message">Message</label>
                             </div>
-                            <button id="submit-button" class="btn waves-effect waves-light" type="submit" name="action" onclick="sendEmail()">Submit
+                            <button id="submit-button" class="btn waves-effect waves-light" type="submit" name="action">Submit
                                 <i class="material-icons right">send</i>
                             </button>
                         </div>
                     </form>
                 </div>
-                <div id="message-container"></div>    
+                <div id="comment-container"></div>    
             </div>
         </div> 
     </div>

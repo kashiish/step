@@ -47,15 +47,62 @@ function switchProject(elem) {
 //with my email in the 'to' field, a subject, and the message they filled in the form. 
 //Referenced from: https://stackoverflow.com/questions/7381150/how-to-send-an-email-from-javascript
 //After we create a server in week 3, I hope to use that to send an email from the user instead of opening the user's mail client
-function sendEmail() {
-    var sender = document.getElementById("icon-name").value;
-    window.open("mailto:kashisharora@google.com?subject=Hello from " + sender + "!&body=" + document.getElementById("icon-message").value);
+// function sendEmail() {
+//     var sender = document.getElementById("icon-name").value;
+//     window.open("mailto:kashisharora@google.com?subject=Hello from " + sender + "!&body=" + document.getElementById("icon-message").value);
+// }
+
+//Requests comments from DataServlet and adds it to the page.
+function loadComments() {
+    fetch('/data').then(response => response.json()).then((comments) => {
+    var commentContainer = document.getElementById('comment-container');
+    //create a div element for each of the commments in the comments array
+    var commentElems = comments.map(createCommentElem);
+    //append each commentElem to commentContainer
+    commentElems.forEach(function(elem) {
+        commentContainer.appendChild(elem);
+    });
+  });
 }
 
-//Requests content from DataServlet and adds it to the page.
-function sayHello() {
-    fetch('/data').then(response => response.json()).then((hello) => {
-    console.log(hello);
-    document.getElementById('message-container').innerText = hello;
-  });
+// Creates a div element for a comment with a name, email, date, and message
+// @return div element
+function createCommentElem(comment) {
+    //convert string to JSON
+    var jsonComment = JSON.parse(comment);
+
+    var div = document.createElement("div");
+    var name = document.createElement("h6");
+    var email = document.createElement("p");
+    var date = document.createElement("p")
+    var message = document.createElement("p");
+
+    name.innerText = jsonComment.name;
+    email.innerText = jsonComment.email;
+    date.innerText = convertTime(jsonComment.timestamp);
+    message.innerText = jsonComment.message;
+    
+    div.classList.add("comment");
+    name.classList.add("comment-name");
+    email.classList.add("comment-email");
+    date.classList.add("comment-date");
+    message.classList.add("comment-message");
+
+    div.appendChild(name);
+    div.appendChild(email);
+    div.appendChild(date);
+    div.appendChild(message);
+
+    return div;
+}
+
+//This function converts a timestamp (in milliseconds) to a date string in the form MM/DD/YYYY
+function convertTime(timestamp) {
+    //create a new date object
+    var date = new Date(timestamp);
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var year = date.getFullYear();
+
+    return month + "/" + day + "/" + year;
 }

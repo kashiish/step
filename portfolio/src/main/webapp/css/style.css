@@ -9,9 +9,6 @@ html, body {
     margin: 30%;
 }
 
-/* .header {
-    font-family: 'Bellota Text', cursive;
-} */
 
 #sidenav-link {
     position:fixed;
@@ -96,4 +93,22 @@ html, body {
     display: inherit;
     position: relative;
     top: 10px;
+}
+
+.comment {
+    margin-bottom: 3%;
+}
+
+.comment-name {
+    font-weight: bold;
+}
+
+.comment-email, .comment-date {
+    margin: 0;
+    display: inline-block;
+    color: gray;
+}
+
+.comment-date {
+    float: right;
 }
