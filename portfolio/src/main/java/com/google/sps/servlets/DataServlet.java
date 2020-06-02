@@ -23,6 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import java.lang.String;
 import com.google.gson.Gson;
 import java.util.ArrayList;
@@ -32,12 +35,23 @@ import java.util.ArrayList;
 public class DataServlet extends HttpServlet {
 
     @Override
-    public void init() {
-        comments = new ArrayList<Comment>();
-    }
-
-    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        PreparedQuery results = datastore.prepare(query);
+
+        ArrayList<Comment> comments = new ArrayList<Comment>();
+        for (Entity entity : results.asIterable()) {
+            String name = (String) entity.getProperty("name");
+            String email = (String) entity.getProperty("email");
+            String message = (String) entity.getProperty("message");
+            long timestamp = (long) entity.getProperty("timestamp");
+
+            Comment comment = new Comment(name, email, message, timestamp);
+            comments.add(comment);
+        }
+        
         response.setContentType("application/json;");
         response.getWriter().println(convertListToJson(comments));
     }
