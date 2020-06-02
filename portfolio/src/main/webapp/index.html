@@ -186,7 +186,15 @@
                         </div>
                     </form>
                 </div>
-                <div id="comment-container"></div>    
+                <div id="max-comments-container" class="input-field col s12">
+                    <select id="max-comments" onchange="loadComments()">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                    </select>
+                    <label>Number of comments:</label>
+                </div> 
+                <div id="comment-container"></div>
             </div>
         </div> 
     </div>
