@@ -29,19 +29,24 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import java.lang.String;
 import com.google.gson.Gson;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+    private final int MAX_COMMENTS_DEFAULT = 5;
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int maxComments = getMaxCommentParam(request, response);
         Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
 
         ArrayList<Comment> comments = new ArrayList<Comment>();
+        int numComments = 0;
         for (Entity entity : results.asIterable()) {
             String name = (String) entity.getProperty("name");
             String email = (String) entity.getProperty("email");
@@ -50,6 +55,9 @@ public class DataServlet extends HttpServlet {
 
             Comment comment = new Comment(name, email, message, timestamp);
             comments.add(comment);
+            numComments++;
+            
+            if(numComments == maxComments) break;
         }
         
         response.setContentType("application/json;");
@@ -61,9 +69,9 @@ public class DataServlet extends HttpServlet {
         long timestamp = System.currentTimeMillis();
 
         Entity commentEntity = new Entity("Comment");
-        commentEntity.setProperty("name", getParameter(request, "name", ""));
-        commentEntity.setProperty("email", getParameter(request, "email", ""));
-        commentEntity.setProperty("message", getParameter(request, "message", ""));
+        commentEntity.setProperty("name", getParameter(request, "name").orElse("Anonymous"));
+        commentEntity.setProperty("email", getParameter(request, "email").orElse("anonymous"));
+        commentEntity.setProperty("message", getParameter(request, "message").orElse(""));
         commentEntity.setProperty("timestamp", timestamp);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -72,6 +80,33 @@ public class DataServlet extends HttpServlet {
         response.sendRedirect("/index.html");
 
     }
+
+    /**
+    * Gets the max-comments parameter to determine how many comments to fetch from Datastore. 
+    * @return int, if the user input was valid it returns the parameter, otherwise it returns the MAX_COMMENT_DEFAULT
+    */
+    private int getMaxCommentParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int maxComments;
+
+        try {
+            maxComments = Integer.parseInt(getParameter(request, "max-comments").orElse(Integer.toString(MAX_COMMENTS_DEFAULT)));
+            
+            //if user input is negative or 0
+            if(maxComments <= 0) {
+                response.getWriter().println("Invalid parameter.");
+                maxComments = MAX_COMMENTS_DEFAULT;
+            }
+
+        } catch(NumberFormatException e) {
+            //if user input is not a number
+            response.getWriter().println("Invalid parameter.");
+            maxComments = MAX_COMMENTS_DEFAULT;
+        }
+
+        return maxComments;
+    
+    }
+
     /**
     * This method converts a list of comments to a JSON string.
     * @return String, the list of comments as a JSON string
@@ -89,15 +124,11 @@ public class DataServlet extends HttpServlet {
     }
 
     /**
-   * @return the request parameter, or the default value if the parameter
-   *         was not specified by the client
+   * @return an Optional of the request parameter
    */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
+    private Optional<String> getParameter(HttpServletRequest request, String name) {
+        String value = request.getParameter(name);
+        return Optional.ofNullable(value);
     }
-    return value;
-  }
 
 }

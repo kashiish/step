@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var instances = M.Sidenav.init(elems);
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems);
+});
+
 //Switches the project description and image to the project that was clicked on. 
 function switchProject(elem) {
     //get the name of the project that was clicked
@@ -54,8 +59,9 @@ function switchProject(elem) {
 
 //Requests comments from DataServlet and adds it to the page.
 function loadComments() {
-    fetch('/data').then(response => response.json()).then((comments) => {
+    fetch('/data?max-comments='+getSelectedMaxComments()).then(response => response.json()).then((comments) => {
     var commentContainer = document.getElementById('comment-container');
+    commentContainer.innerHTML = "";
     //create a div element for each of the commments in the comments array
     var commentElems = comments.map(createCommentElem);
     //append each commentElem to commentContainer
@@ -63,6 +69,12 @@ function loadComments() {
         commentContainer.appendChild(elem);
     });
   });
+}
+
+//Returns the selected option in the "Number of comments" select form.
+function getSelectedMaxComments() {
+    var select = document.getElementById("max-comments");
+    return select.options[select.selectedIndex].value;
 }
 
 // Creates a div element for a comment with a name, email, date, and message
