@@ -55,9 +55,9 @@ function switchProject(elem) {
 //Requests comments from DataServlet and adds it to the page.
 function loadComments() {
     fetch('/data').then(response => response.json()).then((comments) => {
-    commentContainer = document.getElementById('comment-container');
+    var commentContainer = document.getElementById('comment-container');
     //create a div element for each of the commments in the comments array
-    commentElems = comments.map(createCommentElem);
+    var commentElems = comments.map(createCommentElem);
     //append each commentElem to commentContainer
     commentElems.forEach(function(elem) {
         commentContainer.appendChild(elem);
@@ -69,7 +69,7 @@ function loadComments() {
 // @return div element
 function createCommentElem(comment) {
     //convert string to JSON
-    jsonComment = JSON.parse(comment);
+    var jsonComment = JSON.parse(comment);
 
     var div = document.createElement("div");
     var name = document.createElement("h6");
