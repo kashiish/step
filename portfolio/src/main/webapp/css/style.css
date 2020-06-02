@@ -112,3 +112,8 @@ html, body {
 .comment-date {
     float: right;
 }
+
+#max-comments {
+    float: none;
+    width: 20%;
+}
