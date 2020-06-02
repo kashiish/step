@@ -72,9 +72,9 @@ function createCommentElem(comment) {
     jsonComment = JSON.parse(comment);
 
     var div = document.createElement("div");
-    var name = document.createElement("h5");
-    var email = document.createElement("h6");
-    var date = document.createElement("h6")
+    var name = document.createElement("h6");
+    var email = document.createElement("p");
+    var date = document.createElement("p")
     var message = document.createElement("p");
 
     name.innerText = jsonComment.name;
@@ -82,6 +82,7 @@ function createCommentElem(comment) {
     date.innerText = convertTime(jsonComment.timestamp);
     message.innerText = jsonComment.message;
     
+    div.classList.add("comment");
     name.classList.add("comment-name");
     email.classList.add("comment-email");
     date.classList.add("comment-date");
