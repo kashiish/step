@@ -36,12 +36,14 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int maxComments = Integer.parseInt(getParameter(request, "max-comments", "10"));
         Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
 
         ArrayList<Comment> comments = new ArrayList<Comment>();
+        int numComments = 0;
         for (Entity entity : results.asIterable()) {
             String name = (String) entity.getProperty("name");
             String email = (String) entity.getProperty("email");
@@ -50,6 +52,9 @@ public class DataServlet extends HttpServlet {
 
             Comment comment = new Comment(name, email, message, timestamp);
             comments.add(comment);
+            numComments++;
+            
+            if(numComments == maxComments) break;
         }
         
         response.setContentType("application/json;");
