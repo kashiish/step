@@ -29,6 +29,7 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import java.lang.String;
 import com.google.gson.Gson;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
@@ -68,9 +69,9 @@ public class DataServlet extends HttpServlet {
         long timestamp = System.currentTimeMillis();
 
         Entity commentEntity = new Entity("Comment");
-        commentEntity.setProperty("name", getParameter(request, "name", ""));
-        commentEntity.setProperty("email", getParameter(request, "email", ""));
-        commentEntity.setProperty("message", getParameter(request, "message", ""));
+        commentEntity.setProperty("name", getParameter(request, "name").orElse("Anonymous"));
+        commentEntity.setProperty("email", getParameter(request, "email").orElse("anonymous"));
+        commentEntity.setProperty("message", getParameter(request, "message").orElse(""));
         commentEntity.setProperty("timestamp", timestamp);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -88,7 +89,7 @@ public class DataServlet extends HttpServlet {
         int maxComments;
 
         try {
-            maxComments = Integer.parseInt(getParameter(request, "max-comments", "5"));
+            maxComments = Integer.parseInt(getParameter(request, "max-comments").orElse(""+MAX_COMMENTS_DEFAULT));
             
             //if user input is negative or 0
             if(maxComments <= 0) {
@@ -123,15 +124,11 @@ public class DataServlet extends HttpServlet {
     }
 
     /**
-   * @return the request parameter, or the default value if the parameter
-   *         was not specified by the client
+   * @return an Optional of the request parameter
    */
-    private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    private Optional<String> getParameter(HttpServletRequest request, String name) {
         String value = request.getParameter(name);
-        if (value == null) {
-        return defaultValue;
-        }
-        return value;
+        return Optional.ofNullable(value);
     }
 
 }
