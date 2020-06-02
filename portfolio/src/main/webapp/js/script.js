@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var instances = M.Sidenav.init(elems);
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems);
+});
+
 //Switches the project description and image to the project that was clicked on. 
 function switchProject(elem) {
     //get the name of the project that was clicked
@@ -54,7 +59,7 @@ function switchProject(elem) {
 
 //Requests comments from DataServlet and adds it to the page.
 function loadComments() {
-    fetch('/data').then(response => response.json()).then((comments) => {
+    fetch('/data?max-comments=1').then(response => response.json()).then((comments) => {
     var commentContainer = document.getElementById('comment-container');
     //create a div element for each of the commments in the comments array
     var commentElems = comments.map(createCommentElem);
