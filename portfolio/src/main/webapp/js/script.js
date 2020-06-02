@@ -61,6 +61,7 @@ function switchProject(elem) {
 function loadComments() {
     fetch('/data?max-comments='+getSelectedMaxComments()).then(response => response.json()).then((comments) => {
     var commentContainer = document.getElementById('comment-container');
+    commentContainer.innerHTML = "";
     //create a div element for each of the commments in the comments array
     var commentElems = comments.map(createCommentElem);
     //append each commentElem to commentContainer
