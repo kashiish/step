@@ -4,18 +4,18 @@ import java.lang.String;
 
 public final class Song {
 
-    private final String song;
+    private final String name;
     private final long numLikes;
     private final long id;
 
-    public Song(String song, long numLikes, long id) {
+    public Song(String name, long numLikes, long id) {
         this.name = name;
         this.numLikes = numLikes;
         this.id = id;
     }
 
-    public String getSong() {
-        return this.song;
+    public String getName() {
+        return this.name;
     }
 
     public long getNumLikes() {
