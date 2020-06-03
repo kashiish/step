@@ -52,13 +52,16 @@ public class DataServlet extends HttpServlet {
             String email = (String) entity.getProperty("email");
             String message = (String) entity.getProperty("message");
             long timestamp = (long) entity.getProperty("timestamp");
+            long numLikes = (long) entity.getProperty("numLikes");
             long id = entity.getKey().getId();
 
-            Comment comment = new Comment(name, email, message, timestamp, id);
+            Comment comment = new Comment(name, email, message, timestamp, numLikes, id);
             comments.add(comment);
             numComments++;
             
-            if(numComments == maxComments) break;
+            if(numComments == maxComments) {
+                break;
+            }
         }
         
         response.setContentType("application/json;");
@@ -74,6 +77,7 @@ public class DataServlet extends HttpServlet {
         commentEntity.setProperty("email", getParameter(request, "email").orElse("anonymous"));
         commentEntity.setProperty("message", getParameter(request, "message").orElse(""));
         commentEntity.setProperty("timestamp", timestamp);
+        commentEntity.setProperty("numLikes", 0);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(commentEntity);
