@@ -184,3 +184,16 @@ function deleteComment(comment) {
     fetch('/delete-data', {method: 'POST', body: params});
 }
 
+//Tells the server to like the comment (increment numLikes)
+function likeComment(comment) {
+    const params = new URLSearchParams();
+    params.append('id', comment.id);
+    fetch('/like-comment', {method: 'POST', body: params});
+}
+
+//Tells the server to unlike the comment (decrenebt numLikes)
+function unlikeComment(comment) {
+    const params = new URLSearchParams();
+    params.append('id', comment.id);
+    fetch('/unlike-comment', {method: 'POST', body: params});
+}
