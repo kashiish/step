@@ -31,7 +31,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Optional;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that returns comments from and adds comments to Datastore. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
@@ -52,8 +52,9 @@ public class DataServlet extends HttpServlet {
             String email = (String) entity.getProperty("email");
             String message = (String) entity.getProperty("message");
             long timestamp = (long) entity.getProperty("timestamp");
+            long id = entity.getKey().getId();
 
-            Comment comment = new Comment(name, email, message, timestamp);
+            Comment comment = new Comment(name, email, message, timestamp, id);
             comments.add(comment);
             numComments++;
             

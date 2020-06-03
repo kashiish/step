@@ -8,12 +8,14 @@ public final class Comment {
     private final String email;
     private final String message;
     private final long timestamp;
+    private final long id;
 
-    public Comment(String name, String email, String message, long timestamp) {
+    public Comment(String name, String email, String message, long timestamp, long id) {
         this.name = name;
         this.email = email;
         this.message = message;
         this.timestamp = timestamp;
+        this.id = id;
     }
 
     public String getName() {
@@ -30,6 +32,10 @@ public final class Comment {
 
     public long getTimestamp() {
         return this.timestamp;
+    }
+
+    public long getId() {
+        return this.id;
     }
 
 }

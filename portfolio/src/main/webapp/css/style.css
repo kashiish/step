@@ -96,7 +96,7 @@ html, body {
 }
 
 .comment {
-    margin-bottom: 3%;
+    padding-bottom: 3%;
 }
 
 .comment-name {
@@ -113,7 +113,23 @@ html, body {
     float: right;
 }
 
+.comment-message {
+    word-wrap: break-word;
+    margin-bottom:0;
+}
+
 #max-comments-container {
     float: none;
     width: 20%;
+}
+
+.black-icon {
+    color: black;
+}
+
+.delete-comment {
+    float: right;
+    background: none;
+    border: none;
+    padding: 0;
 }
