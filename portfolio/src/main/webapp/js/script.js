@@ -89,6 +89,7 @@ function createCommentElem(comment) {
     var date = document.createElement("p")
     var message = document.createElement("p");
     var deleteButton = document.createElement('button');
+    var smile = createSmileButton(jsonComment);
 
     name.innerText = jsonComment.name;
     email.innerText = jsonComment.email;
@@ -104,7 +105,7 @@ function createCommentElem(comment) {
     deleteButton.classList.add("delete-comment")
 
 
-    deleteButton.addEventListener('click', () => {
+    deleteButton.addEventListener("click", () => {
         deleteComment(jsonComment);
 
         // Remove the task from the DOM.
@@ -116,8 +117,53 @@ function createCommentElem(comment) {
     commentElem.appendChild(date);
     commentElem.appendChild(message);
     commentElem.appendChild(deleteButton);
+    commentElem.appendChild(smile);
 
     return commentElem;
+}
+
+//Creates the smile (like) button for each comment. 
+//@return div element container a button and a label which represents the number of likes the comment has
+function createSmileButton(comment) {
+
+    var container = document.createElement("div");
+    var button = document.createElement("button");
+    var numLikesLabel = document.createElement("span");
+
+    numLikesLabel.innerText = comment.numLikes;
+    button.innerHTML = "<i class='material-icons smile'>emoji_emotions</i>";
+
+    container.classList.add("smile-container");
+    button.classList.add("smile-button");
+    numLikesLabel.classList.add("num-likes");
+
+    button.addEventListener("click", () => {
+        var smileIcon = button.querySelector("i");
+
+        //unliking a liked comment
+        if(smileIcon.classList.contains("press")) {
+            //update on frontend so we don't have to refresh the page
+            numLikesLabel.innerText = parseInt(numLikesLabel.innerText) - 1;
+            //update backend
+            unlikeComment(comment);
+
+            smileIcon.classList.remove("press");
+        //liking
+        } else {
+            //update on front end so we don't have to refresh the page
+            numLikesLabel.innerText = parseInt(numLikesLabel.innerText) + 1;
+            //update backend
+            likeComment(comment);
+
+            smileIcon.classList.add("press");
+        }
+    });
+
+    container.appendChild(button);
+    container.appendChild(numLikesLabel);
+
+    return container;
+
 }
 
 //This function converts a timestamp (in milliseconds) to a date string in the form MM/DD/YYYY
@@ -133,7 +179,21 @@ function convertTime(timestamp) {
 
 //Tells the server to delete the comment.
 function deleteComment(comment) {
-  const params = new URLSearchParams();
-  params.append('id', comment.id);
-  fetch('/delete-data', {method: 'POST', body: params});
+    const params = new URLSearchParams();
+    params.append('id', comment.id);
+    fetch('/delete-data', {method: 'POST', body: params});
+}
+
+//Tells the server to like the comment (increment numLikes)
+function likeComment(comment) {
+    const params = new URLSearchParams();
+    params.append('id', comment.id);
+    fetch('/like-comment', {method: 'POST', body: params});
+}
+
+//Tells the server to unlike the comment (decrenebt numLikes)
+function unlikeComment(comment) {
+    const params = new URLSearchParams();
+    params.append('id', comment.id);
+    fetch('/unlike-comment', {method: 'POST', body: params});
 }

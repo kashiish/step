@@ -132,4 +132,54 @@ html, body {
     background: none;
     border: none;
     padding: 0;
+    cursor: pointer;
+}
+
+/* Like button adapted from https://codepen.io/kieranfivestars/pen/PwzjgN */
+.smile-container {
+    float:right;
+    padding-right: 10px;
+}
+
+.smile {
+    cursor:pointer;
+    color:#aaa;
+    transition:.2s;
+    font-size: 25px !important;
+}
+
+.smile:hover {
+  color:#666;
+}
+
+.smile.press {
+  animation: size .4s;
+  color: pink;
+}
+
+@keyframes fade {
+  0% {color:#transparent;}
+  50% {color:#e23b3b;}
+  100% {color:#transparent;}
+}
+
+/* *********** */
+
+.smile-button {
+  padding:0;
+  background:none;
+  border:none;
+}
+
+.smile-button:focus {
+    background-color:transparent;
+}
+
+.num-likes {
+  display:none;
+  text-align:center;
+}
+
+.smile-button:hover + .num-likes {
+    display: block;
 }
