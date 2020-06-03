@@ -135,7 +135,7 @@ html, body {
     cursor: pointer;
 }
 
-/* Like heart button adapted from https://codepen.io/kieranfivestars/pen/PwzjgN */
+/* Like button adapted from https://codepen.io/kieranfivestars/pen/PwzjgN */
 .smile-container {
     float:right;
     padding-right: 10px;
