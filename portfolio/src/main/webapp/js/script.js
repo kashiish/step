@@ -83,29 +83,41 @@ function createCommentElem(comment) {
     //convert string to JSON
     var jsonComment = JSON.parse(comment);
 
-    var div = document.createElement("div");
+    var commentElem = document.createElement("div");
     var name = document.createElement("h6");
     var email = document.createElement("p");
     var date = document.createElement("p")
     var message = document.createElement("p");
+    var deleteButton = document.createElement('button');
 
     name.innerText = jsonComment.name;
     email.innerText = jsonComment.email;
     date.innerText = convertTime(jsonComment.timestamp);
     message.innerText = jsonComment.message;
+    deleteButton.innerHTML = "<i class='material-icons black-icon'>delete</i>";
     
-    div.classList.add("comment");
+    commentElem.classList.add("comment");
     name.classList.add("comment-name");
     email.classList.add("comment-email");
     date.classList.add("comment-date");
     message.classList.add("comment-message");
+    deleteButton.classList.add("delete-comment")
 
-    div.appendChild(name);
-    div.appendChild(email);
-    div.appendChild(date);
-    div.appendChild(message);
 
-    return div;
+    deleteButton.addEventListener('click', () => {
+        deleteComment(jsonComment);
+
+        // Remove the task from the DOM.
+        commentElem.remove();
+  });
+
+    commentElem.appendChild(name);
+    commentElem.appendChild(email);
+    commentElem.appendChild(date);
+    commentElem.appendChild(message);
+    commentElem.appendChild(deleteButton);
+
+    return commentElem;
 }
 
 //This function converts a timestamp (in milliseconds) to a date string in the form MM/DD/YYYY
@@ -117,4 +129,11 @@ function convertTime(timestamp) {
     var year = date.getFullYear();
 
     return month + "/" + day + "/" + year;
+}
+
+//Tells the server to delete the comment.
+function deleteComment(comment) {
+  const params = new URLSearchParams();
+  params.append('id', comment.id);
+  fetch('/delete-data', {method: 'POST', body: params});
 }
