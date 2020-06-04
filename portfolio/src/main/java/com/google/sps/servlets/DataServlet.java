@@ -30,12 +30,15 @@ import java.lang.String;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Arrays;
+
 
 /** Servlet that returns comments from and adds comments to Datastore. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
     private final int MAX_COMMENTS_DEFAULT = 5;
+    private final String[] sortTypes =  new String[]{"newest", "oldest", "popular"};
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -54,7 +57,7 @@ public class DataServlet extends HttpServlet {
             default:
                 query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
         }
-        
+
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
 
@@ -104,8 +107,10 @@ public class DataServlet extends HttpServlet {
     private String getSortTypeParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String sortType = getParameter(request, "sort-type").orElse("newest").toLowerCase();
 
-        if(!sortType.equals("newest") && !sortType.equals("oldest") && !sortType.equals("popular")) {
-            response.getWriter().println("Invalid value for sort-type.");
+        boolean result = Arrays.stream(sortTypes).anyMatch(sortType::equals);
+        
+        if (!result) {
+	        response.getWriter().println("Invalid value for sort-type.");
             sortType = "newest";
         }
 
