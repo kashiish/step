@@ -197,3 +197,89 @@ function unlikeComment(comment) {
     params.append('id', comment.id);
     fetch('/unlike-comment', {method: 'POST', body: params});
 }
+
+//Requests song recommendations from SongRecServlet and adds it to the page.
+function loadSongRecs() {
+    fetch('/recs?num-loaded=0').then(response => response.json()).then((recs) => {
+    var recContainer = document.getElementById('rec-container');
+    //create a div element for each of the recommendations in the recs array
+    var recElems = recs.map(createRecElem);
+    //append each recElem to recContainer
+    recElems.forEach(function(elem) {
+        recContainer.appendChild(elem);
+    });
+
+    //append load more button
+    document.getElementById('song-rec-form').appendChild(createLoadMoreRecsButton());
+  });
+}
+
+//Creates a load more song recs button. When the user clicks this, more songs are fetched from the server and added to the page.
+function createLoadMoreRecsButton() {
+    var button = document.createElement("button");
+    button.innerText = "load more";
+    
+    button.id = "load-more-button";
+
+    button.addEventListener("click", () => {
+        loadMoreSongRecs();
+        
+    });
+
+
+    return button;
+}
+
+//Fetches more song recommendations from the server and adds them to the page. If there are no more song recommendations, 
+//it adds a message to the page indicating that there are no more.
+function loadMoreSongRecs() {
+    fetch('/recs?num-loaded='+getNumLoadedRecs()).then(response => response.json()).then((recs) => {
+
+        var recContainer = document.getElementById('rec-container');
+
+        //if there are no more recommendations
+        if(recs.length === 0){
+            var noMoreRecs = document.createElement("p");
+            noMoreRecs.innerText = "Looks like there are no more!";
+
+            recContainer.append(noMoreRecs);
+            //remove load more button
+            document.getElementById("load-more-button").style.display = "none";
+            return;
+        }
+
+        //create a div element for each of the recommendations in the recs array
+        var recElems = recs.map(createRecElem);
+        //append each recElem to recContainer
+        recElems.forEach(function(elem) {
+            recContainer.appendChild(elem);
+        });
+
+    });
+}
+
+//Gets the number of song recommendations already on the page.
+function getNumLoadedRecs() {
+    var recContainer = document.getElementById("rec-container");
+    return recContainer.childElementCount;
+}
+
+//Creates a div element for a song recommendation JSON object.
+function createRecElem(rec) {
+
+    var jsonRec = JSON.parse(rec);
+
+    var container = document.createElement("div");
+    var recName = document.createElement("p");
+
+    recName.innerText = jsonRec.name;
+
+    container.classList.add("song-rec");
+
+    container.appendChild(recName);
+
+    return container;
+
+}
+
+
