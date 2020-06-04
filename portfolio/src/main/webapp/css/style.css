@@ -141,11 +141,18 @@ html, body {
     padding-right: 10px;
 }
 
+.smile {
+    font-size: 25px !important;
+}
+
+.plus-one {
+    font-size: 22px !important;
+}
+
 .smile, .plus-one {
     cursor:pointer;
     color:#aaa;
     transition:.2s;
-    font-size: 25px !important;
 }
 
 .smile:hover, .plus-one:hover {
@@ -154,7 +161,14 @@ html, body {
 
 .smile.press, .plus-one.press {
   animation: size .4s;
-  color: pink;
+}
+
+.smile.press {
+    color: pink;
+}
+
+.plus-one.press {
+    color: green;
 }
 
 @keyframes fade {
@@ -211,15 +225,23 @@ html, body {
 }
 
 .song-rec {
-    padding-top: 2%;
-    padding-bottom: 2%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    border-bottom: 1px solid lightgray;
 }
 
 .song-rec p {
     display: inline-block;
     margin: 0;
+    width: 95%;
 }
 
 .plus-one-button {
     float: right;
+}
+
+#load-more-button {
+    display: none;
+    width: fit-content;
+    margin-top: 2%;
 }
