@@ -26,32 +26,49 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import java.util.Iterator;
 import java.lang.String;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Optional;
 
-/** Servlet that returns comments from and adds comments to Datastore. */
-@WebServlet("/songs")
+/** Servlet that returns song recommendations from and adds song recomendations to Datastore. */
+@WebServlet("/recs")
 public class SongRecServlet extends HttpServlet {
+
+    private final long NUM_RECS_TO_LOAD = 5;
+
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //get the number of songs loaded so far
+        int numLoadedRecs = getNumLoadedParam(request, response);
+        //sort by number of likes
         Query query = new Query("Song").addSort("numLikes", SortDirection.DESCENDING);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
 
         ArrayList<Song> songs = new ArrayList<Song>();
-        int numComments = 0;
-        for (Entity entity : results.asIterable()) {
-            String name = (String) entity.getProperty("name");
-            long numLikes = (long) entity.getProperty("numLikes");
-            long id = entity.getKey().getId();
+        Iterator<Entity> iter = results.asIterator();
 
-            Song song = new Song(name, numLikes, id);
-            songs.add(song);
-            
+        for(int i = 0; i < numLoadedRecs + NUM_RECS_TO_LOAD; i++) {
+            if(!iter.hasNext()) {
+                break;
+            }
+
+            Entity entity = iter.next();
+
+            //only add songs that have not been loaded yet
+            if(i >= numLoadedRecs) {
+                String name = (String) entity.getProperty("name");
+                long numLikes = (long) entity.getProperty("numLikes");
+                long id = entity.getKey().getId();
+
+                Song song = new Song(name, numLikes, id);
+                songs.add(song);
+            }
+
         }
         
         response.setContentType("application/json;");
@@ -68,10 +85,35 @@ public class SongRecServlet extends HttpServlet {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(songEntity);
     
-        response.sendRedirect("/index.html");
+        response.sendRedirect("/song-rec.html");
 
     }
 
+    /**
+    * Gets the num-loaded parameter to determine how many recommendations have been loaded already. 
+    * @return int, if the user input was valid it returns the parameter, otherwise it returns 0
+    */
+    private int getNumLoadedParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int numLoaded;
+
+        try {
+            numLoaded =  Integer.parseInt(getParameter(request, "num-loaded").orElse("0"));
+            
+            //if user input is negative 
+            if(numLoaded < 0) {
+                response.getWriter().println("Invalid parameter.");
+                numLoaded = 0;
+            }
+
+        } catch(NumberFormatException e) {
+            //if user input is not a number
+            response.getWriter().println("Invalid parameter.");
+            numLoaded = 0;
+        }
+
+        return numLoaded;
+    
+    }
 
     /**
     * This method converts a list of songs to a JSON string.
