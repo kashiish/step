@@ -59,25 +59,25 @@ function switchProject(elem) {
 
 //Requests comments from DataServlet and adds it to the page.
 function loadComments() {
-    fetch('/data?max-comments='+getSelectedMaxComments()).then(response => response.json()).then((comments) => {
-    var commentContainer = document.getElementById('comment-container');
-    commentContainer.innerHTML = "";
-    //create a div element for each of the commments in the comments array
-    var commentElems = comments.map(createCommentElem);
-    //append each commentElem to commentContainer
-    commentElems.forEach(function(elem) {
-        commentContainer.appendChild(elem);
+    fetch('/data?max-comments='+getSelection("max-comments")+"&sort-type="+getSelection("sort-type")).then(response => response.json()).then((comments) => {
+        var commentContainer = document.getElementById('comment-container');
+        commentContainer.innerHTML = "";
+        //create a div element for each of the commments in the comments array
+        var commentElems = comments.map(createCommentElem);
+        //append each commentElem to commentContainer
+        commentElems.forEach(function(elem) {
+            commentContainer.appendChild(elem);
+        });
     });
-  });
 }
 
-//Returns the selected option in the "Number of comments" select form.
-function getSelectedMaxComments() {
-    var select = document.getElementById("max-comments");
+//Returns the selected option in select form with id parameter.
+function getSelection(id) {
+    var select = document.getElementById(id);
     return select.options[select.selectedIndex].value;
 }
 
-// Creates a div element for a comment with a name, email, date, and message
+// Creates a div element for a comment with a name, date, and message
 // @return div element
 function createCommentElem(comment) {
     //convert string to JSON
@@ -85,21 +85,18 @@ function createCommentElem(comment) {
 
     var commentElem = document.createElement("div");
     var name = document.createElement("h6");
-    var email = document.createElement("p");
     var date = document.createElement("p")
     var message = document.createElement("p");
     var deleteButton = document.createElement('button');
     var smile = createSmileButton(jsonComment);
 
     name.innerText = jsonComment.name;
-    email.innerText = jsonComment.email;
     date.innerText = convertTime(jsonComment.timestamp);
     message.innerText = jsonComment.message;
     deleteButton.innerHTML = "<i class='material-icons black-icon'>delete</i>";
     
     commentElem.classList.add("comment");
     name.classList.add("comment-name");
-    email.classList.add("comment-email");
     date.classList.add("comment-date");
     message.classList.add("comment-message");
     deleteButton.classList.add("delete-comment")
@@ -113,7 +110,6 @@ function createCommentElem(comment) {
   });
 
     commentElem.appendChild(name);
-    commentElem.appendChild(email);
     commentElem.appendChild(date);
     commentElem.appendChild(message);
     commentElem.appendChild(deleteButton);
