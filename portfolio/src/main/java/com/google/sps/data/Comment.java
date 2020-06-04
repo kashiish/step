@@ -5,6 +5,7 @@ import java.lang.String;
 public final class Comment {
 
     private final String name;
+    private final String email;
     private final String message;
     private final long timestamp;
     private final long numLikes;

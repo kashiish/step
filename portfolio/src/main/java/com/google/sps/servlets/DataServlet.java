@@ -49,6 +49,7 @@ public class DataServlet extends HttpServlet {
         int numComments = 0;
         for (Entity entity : results.asIterable()) {
             String name = (String) entity.getProperty("name");
+            String email = (String) entity.getProperty("email");
             String message = (String) entity.getProperty("message");
             long timestamp = (long) entity.getProperty("timestamp");
             long numLikes = (long) entity.getProperty("numLikes");
@@ -73,6 +74,7 @@ public class DataServlet extends HttpServlet {
 
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("name", getParameter(request, "name").orElse("Anonymous"));
+        commentEntity.setProperty("email", getParameter(request, "email").orElse("anonymous"));
         commentEntity.setProperty("message", getParameter(request, "message").orElse(""));
         commentEntity.setProperty("timestamp", timestamp);
         commentEntity.setProperty("numLikes", 0);
