@@ -15,7 +15,7 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
-import com.google.sps.data.Song;
+import com.google.sps.data.SongRec;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -44,14 +44,15 @@ public class SongRecServlet extends HttpServlet {
         //get the number of songs loaded so far
         int numLoadedRecs = getNumLoadedParam(request, response);
         //sort by number of likes
-        Query query = new Query("Song").addSort("numLikes", SortDirection.DESCENDING);
+        Query query = new Query("SongRec").addSort("numLikes", SortDirection.DESCENDING);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
 
-        ArrayList<Song> songs = new ArrayList<Song>();
+        ArrayList<SongRec> songRecs = new ArrayList<SongRec>();
         Iterator<Entity> iter = results.asIterator();
 
+        //get NUM_RECS_TO_LOAD more songs
         for(int i = 0; i < numLoadedRecs + NUM_RECS_TO_LOAD; i++) {
             if(!iter.hasNext()) {
                 break;
@@ -65,25 +66,25 @@ public class SongRecServlet extends HttpServlet {
                 long numLikes = (long) entity.getProperty("numLikes");
                 long id = entity.getKey().getId();
 
-                Song song = new Song(name, numLikes, id);
-                songs.add(song);
+                SongRec rec = new SongRec(name, numLikes, id);
+                songRecs.add(rec);
             }
 
         }
         
         response.setContentType("application/json;");
-        response.getWriter().println(convertListToJson(songs));
+        response.getWriter().println(convertListToJson(songRecs));
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        Entity songEntity = new Entity("Song");
-        songEntity.setProperty("name", getParameter(request, "name").orElse(""));
-        songEntity.setProperty("numLikes", 0);
+        Entity songRecEntity = new Entity("SongRec");
+        songRecEntity.setProperty("name", getParameter(request, "name").orElse(""));
+        songRecEntity.setProperty("numLikes", 0);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        datastore.put(songEntity);
+        datastore.put(songRecEntity);
     
         response.sendRedirect("/song-rec.html");
 
@@ -119,16 +120,16 @@ public class SongRecServlet extends HttpServlet {
     * This method converts a list of songs to a JSON string.
     * @return String, the list of songs as a JSON string
     */
-    private String convertListToJson(ArrayList<Song> songs) {
-        ArrayList<String> jsonSongs = new ArrayList<String>();
+    private String convertListToJson(ArrayList<SongRec> songRecs) {
+        ArrayList<String> jsonSongRecs = new ArrayList<String>();
         Gson gson = new Gson();
-        //convert all Song objects to JSON
-        for(Song song : songs) {
-            jsonSongs.add(gson.toJson(song));
+        //convert all SongRec objects to JSON
+        for(SongRec songRec : songRecs) {
+            jsonSongRecs.add(gson.toJson(songRec));
         }
 
         //convert list to JSON
-        return gson.toJson(jsonSongs);
+        return gson.toJson(jsonSongRecs);
     }
 
     /**
