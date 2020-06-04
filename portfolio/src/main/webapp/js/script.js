@@ -264,22 +264,42 @@ function getNumLoadedRecs() {
     return recContainer.childElementCount;
 }
 
-//Creates a div element for a song recommendation JSON object.
+//Creates a div element for a song recommendation JSON object. Each div contains an element for the name of the song
+//recommendation and a plus one button to like a song recommendation.
 function createRecElem(rec) {
 
     var jsonRec = JSON.parse(rec);
 
     var container = document.createElement("div");
     var recName = document.createElement("p");
+    var plusOneButton = document.createElement("button");
 
     recName.innerText = jsonRec.name;
+    plusOneButton.innerHTML = "<i class='material-icons plus-one'>exposure_plus_1</i>";
 
     container.classList.add("song-rec");
+    plusOneButton.classList.add("plus-one-button");
+
+    plusOneButton.addEventListener("click", () => {
+        likeSong(jsonRec);
+
+        var plusOneIcon = plusOneButton.querySelector("i");
+        plusOneIcon.classList.add("press");
+        //once the recommendation is liked, disable the button (can't undo plus one)
+        plusOneButton.disabled = true;
+    });
 
     container.appendChild(recName);
+    container.appendChild(plusOneButton);
 
     return container;
 
 }
 
+//Tells the serer to like a song recommendation.
+function likeSong(rec) {
+    const params = new URLSearchParams();
+    params.append('id', rec.id);
+    fetch('/like-rec', {method: 'POST', body: params});
+}
 
