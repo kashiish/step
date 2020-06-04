@@ -23,25 +23,9 @@ function loadSongRecs() {
         recContainer.appendChild(elem);
     });
 
-    //append load more button
-    document.getElementById('song-rec-form').appendChild(createLoadMoreRecsButton());
+    //display load more button
+    document.getElementById('load-more-button').style.display = "block";
   });
-}
-
-//Creates a load more song recs button. When the user clicks this, more songs are fetched from the server and added to the page.
-function createLoadMoreRecsButton() {
-    var button = document.createElement("button");
-    button.innerText = "load more";
-    
-    button.id = "load-more-button";
-
-    button.addEventListener("click", () => {
-        loadMoreSongRecs();
-        
-    });
-
-
-    return button;
 }
 
 //Fetches more song recommendations from the server and adds them to the page. If there are no more song recommendations, 
