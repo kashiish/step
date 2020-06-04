@@ -43,14 +43,18 @@ public class DataServlet extends HttpServlet {
         String sortType = getSortTypeParam(request, response);
 
         Query query;
-        if(sortType.equals("newest")) {
-            query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-        } else if(sortType.equals("oldest")) {
-            query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
-        } else {
-            query = new Query("Comment").addSort("numLikes", SortDirection.DESCENDING);
-        }
 
+        switch(sortType) {
+            case "popular":
+                query = new Query("Comment").addSort("numLikes", SortDirection.DESCENDING);
+                break;
+            case "oldest":
+                query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
+                break;
+            default:
+                query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+        }
+        
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
 
