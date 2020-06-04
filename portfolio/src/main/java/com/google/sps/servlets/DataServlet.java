@@ -40,8 +40,16 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int maxComments = getMaxCommentParam(request, response);
+        String sortType = getSortTypeParam(request, response);
 
-        Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+        Query query;
+        if(sortType.equals("newest")) {
+            query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+        } else if(sortType.equals("oldest")) {
+            query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
+        } else {
+            query = new Query("Comment").addSort("numLikes", SortDirection.DESCENDING);
+        }
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
@@ -85,6 +93,21 @@ public class DataServlet extends HttpServlet {
 
     }
 
+    /**
+    * Gets the sort-type parameter to determine what order to display comments. 
+    * @return String, if the user input was valid it returns the parameter, otherwise it returns "newest"
+    */
+    private String getSortTypeParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String sortType = getParameter(request, "sort-type").orElse("newest").toLowerCase();
+
+        if(!sortType.equals("newest") && !sortType.equals("oldest") && !sortType.equals("popular")) {
+            response.getWriter().println("Invalid value for sort-type.");
+            sortType = "newest";
+        }
+
+        return sortType;
+        
+    }
 
     /**
     * Gets the max-comments parameter to determine how many comments to fetch from Datastore. 
