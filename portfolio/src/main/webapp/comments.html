@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Kashish's Portfolio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="js/script.js"></script>
+  </head>
+  <body onload="loadComments()">
+    <div id="content">
+        <ul id="slide-out" class="sidenav">
+            <li><div class="user-view">
+                    <div class="background">
+                        <img src="images/sky.jpg"/>
+                    </div>
+                    <a href="#user"><img class="circle" src="images/kashish.JPG"></a>
+                    <a href="#name"><span class="white-text name">Kashish Arora</span></a>
+                    <a href="#email"><span class="white-text email">kashisharora@google.com</span></a>
+                    <div id="social">
+                        <a href="https://www.linkedin.com/in/kashish-a/" target="_blank">
+                            <img class="social-icon" src="images/linkedin.png"/>
+                        </a>
+
+                        <a href="https://github.com/kashiish" target="_blank">
+                            <img class="social-icon" src="images/github.png"/>
+                        </a>
+                    </div>
+            </div></li>
+            <li><a href="/index.html#about" class="sidenav-close">About</a></li>
+            <li><a href="/index.html#work" class="sidenav-close">Experience</a></li>
+            <li><a href="/index.html#projects" class="sidenav-close">Projects</a></li>
+            <li><a href="/index.html#skills" class="sidenav-close">Technical Skills</a></li>
+            <li><a href="/index.html#contact" class="sidenav-close">Contact</a></li>
+            <li><div class="divider"></div></li>
+            <li><a href="/comments.html" class="sidenav-close">Comments</a></li>
+        </ul>
+        <a href="#" data-target="slide-out" class="sidenav-trigger" id="sidenav-link"><i class="material-icons black-icon" id="nav-icon">menu</i></a>
+        <div class="parallax-container">
+            <div class="parallax"><img src="images/waterfall.jpg"></div>
+        </div>
+        <div id="comment" class="section white">
+            <div class="row container">
+                <h2 class="header">Thoughts?</h2>
+                <h6 style="margin-left:4px;">Leave a comment below!</h6>
+                <div class="row">
+                    <form class="col s12" action="/data" method="POST">
+                        <div class="row">
+                            <div class="input-field col s6 comment-form-input">
+                                <i class="material-icons prefix">account_circle</i>
+                                <input name="name" id="icon-name" type="text" class="validate" required="" aria-required="true">
+                                <label for="icon-name">Name</label>
+                            </div>
+                            <div class="input-field col s6 comment-form-input">
+                                <i class="material-icons prefix">edit</i>
+                                <textarea name="message" id="icon-message" class="materialize-textarea validate" required="" aria-required="true"></textarea>
+                                <label for="icon-message">Message</label>
+                            </div>
+                            <button id="submit-button" class="btn waves-effect waves-light" type="submit" name="action">Submit
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div id="comment-selection">
+                    <div id="max-comments-container" class="input-field col s12">
+                        <select id="max-comments" onchange="loadComments()">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                        </select>
+                        <label>Number of comments:</label>
+                    </div> 
+                    <div id="sort-type-container" class="input-field col s12">
+                        <select id="sort-type" onchange="loadComments()">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="popular">Popular</option>
+                        </select>
+                        <label>Sort by:</label>
+                    </div> 
+                </div>
+                <div id="comment-container"></div>
+            </div>
+        </div> 
+    </div>
+    <script type="text/javascript" src="js/materialize.js"></script>
+  </body>
+</html>
