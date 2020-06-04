@@ -70,27 +70,46 @@ function createRecElem(rec) {
 
     var container = document.createElement("div");
     var recName = document.createElement("p");
-    var plusOneButton = document.createElement("button");
+    var plusOneButton = createPlusOneButton(jsonRec);
 
     recName.innerText = jsonRec.name;
-    plusOneButton.innerHTML = "<i class='material-icons plus-one'>exposure_plus_1</i>";
 
     container.classList.add("song-rec");
-    plusOneButton.classList.add("plus-one-button");
-
-    plusOneButton.addEventListener("click", () => {
-        likeSong(jsonRec);
-
-        var plusOneIcon = plusOneButton.querySelector("i");
-        plusOneIcon.classList.add("press");
-        //once the recommendation is liked, disable the button (can't undo plus one)
-        plusOneButton.disabled = true;
-    });
 
     container.appendChild(recName);
     container.appendChild(plusOneButton);
 
     return container;
+
+}
+
+//Create the plus one button for each song recommendation
+function createPlusOneButton(rec) {
+    var container = document.createElement("div");
+    var button = document.createElement("button");
+    var numPlusOneLabel = document.createElement("span");
+
+    numPlusOneLabel.innerText = rec.numLikes;
+    button.innerHTML = "<i class='material-icons plus-one'>exposure_plus_1</i>";
+
+    container.classList.add("plus-one-container");
+    button.classList.add("plus-one-button");
+    numPlusOneLabel.classList.add("num-likes");
+
+    button.addEventListener("click", () => {
+        likeSong(rec);
+        numPlusOneLabel.innerText = parseInt(numPlusOneLabel.innerText) + 1;
+        var plusOneIcon = button.querySelector("i");
+        plusOneIcon.classList.add("press");
+        //once the recommendation is liked, disable the button (can't undo plus one)
+        button.disabled = true;
+    });
+
+    container.appendChild(button);
+    container.appendChild(numPlusOneLabel);
+
+    return container;
+
 
 }
 
