@@ -40,6 +40,7 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int maxComments = getMaxCommentParam(request, response);
+
         Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -49,13 +50,12 @@ public class DataServlet extends HttpServlet {
         int numComments = 0;
         for (Entity entity : results.asIterable()) {
             String name = (String) entity.getProperty("name");
-            String email = (String) entity.getProperty("email");
             String message = (String) entity.getProperty("message");
             long timestamp = (long) entity.getProperty("timestamp");
             long numLikes = (long) entity.getProperty("numLikes");
             long id = entity.getKey().getId();
 
-            Comment comment = new Comment(name, email, message, timestamp, numLikes, id);
+            Comment comment = new Comment(name, message, timestamp, numLikes, id);
             comments.add(comment);
             numComments++;
             
@@ -74,7 +74,6 @@ public class DataServlet extends HttpServlet {
 
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("name", getParameter(request, "name").orElse("Anonymous"));
-        commentEntity.setProperty("email", getParameter(request, "email").orElse("anonymous"));
         commentEntity.setProperty("message", getParameter(request, "message").orElse(""));
         commentEntity.setProperty("timestamp", timestamp);
         commentEntity.setProperty("numLikes", 0);
@@ -85,6 +84,7 @@ public class DataServlet extends HttpServlet {
         response.sendRedirect("/index.html");
 
     }
+
 
     /**
     * Gets the max-comments parameter to determine how many comments to fetch from Datastore. 
@@ -98,13 +98,13 @@ public class DataServlet extends HttpServlet {
             
             //if user input is negative or 0
             if(maxComments <= 0) {
-                response.getWriter().println("Invalid parameter.");
+                response.getWriter().println("Invalid value for max-comments.");
                 maxComments = MAX_COMMENTS_DEFAULT;
             }
 
         } catch(NumberFormatException e) {
             //if user input is not a number
-            response.getWriter().println("Invalid parameter.");
+            response.getWriter().println("Invalid value for max-comments.");
             maxComments = MAX_COMMENTS_DEFAULT;
         }
 
