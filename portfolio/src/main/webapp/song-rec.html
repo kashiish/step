@@ -9,8 +9,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <script src="js/script.js"></script>
     </head>
-    <body>
-        <div>
+    <body onload="loadSongRecs()">
+        <div id="song-rec-content">
             <ul id="slide-out" class="sidenav">
                 <li><div class="user-view">
                         <div class="background">
@@ -36,9 +36,25 @@
                 <li><a href="/index.html#skills" class="sidenav-close">Technical Skills</a></li>
                 <li><a href="/index.html#contact" class="sidenav-close">Contact</a></li>
                 <li><div class="divider"></div></li>
-                <li><a href="/more.html" class="sidenav-close">Leave me a song recommendation!</a></li>
+                <li><a href="/song-rec.html" class="sidenav-close">Leave me a song recommendation!</a></li>
             </ul>
             <a href="#" data-target="slide-out" class="sidenav-trigger" id="sidenav-link"><i class="material-icons black-icon" id="nav-icon">menu</i></a>
+            <div id="song-rec-info">
+                <p>My music library consists of a lot of modern/alternative rock, pop, and R&ampB. My dad was a huge fan on Michael Jackson and played his music all the time 
+                    while I was growing up, so naturally he became one of my favorite artists. Other than that, I'm a huge fan of Frank Ocean, the Neighbourhood, and Daughter.
+                    To the right, you'll find a Spotify playlist with some of my favorite songs. I'm always looking for new music to listen to, so leave a suggestion below 
+                    whether it's one of your favorite songs or a song you think I'll like!</p>
+            </div>
+        </div>
+        <div id="song-rec-form">
+            <form action="/recs" method="POST">
+                <div class="input-field col s6">
+                    <i class="material-icons prefix">music_note</i>
+                    <input name="name" type="text" class="validate" required="" aria-required="true">
+                    <label>Leave a suggestion</label>
+                </div>
+            </form>
+            <div id="rec-container"></div>
         </div>
         <script type="text/javascript" src="js/materialize.js"></script>
     </body>
