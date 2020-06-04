@@ -5,15 +5,13 @@ import java.lang.String;
 public final class Comment {
 
     private final String name;
-    private final String email;
     private final String message;
     private final long timestamp;
     private final long numLikes;
     private final long id;
 
-    public Comment(String name, String email, String message, long timestamp, long numLikes, long id) {
+    public Comment(String name, String message, long timestamp, long numLikes, long id) {
         this.name = name;
-        this.email = email;
         this.message = message;
         this.timestamp = timestamp;
         this.numLikes = numLikes;
@@ -22,10 +20,6 @@ public final class Comment {
 
     public String getName() {
         return this.name;
-    }
-
-    public String getEmail() {
-        return this.email;
     }
 
     public String getMessage() {
