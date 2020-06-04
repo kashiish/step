@@ -183,3 +183,23 @@ html, body {
 .smile-button:hover + .num-likes {
     display: block;
 }
+
+#song-rec-content {
+    background-image: url("/images/headphones.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 700px;
+}
+
+#song-rec-info {
+    background-color: rgba(0,0,0,0.1);
+    position: absolute;
+    bottom: 50%;
+    left: 5%;
+    width: 40%;
+}
+
+#song-rec-info p {
+    padding: 5%;
+}
