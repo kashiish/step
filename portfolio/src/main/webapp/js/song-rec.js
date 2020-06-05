@@ -16,6 +16,12 @@
 function loadSongRecs() {
     fetch('/recs?num-loaded=0').then(response => response.json()).then((recs) => {
     var recContainer = document.getElementById('rec-container');
+
+    if(recs.length == 0) {
+        recContainer.innerText = "None yet!";
+        return;
+    }
+
     //create a div element for each of the recommendations in the recs array
     var recElems = recs.map(createRecElem);
     //append each recElem to recContainer
