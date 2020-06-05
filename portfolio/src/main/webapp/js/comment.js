@@ -51,9 +51,9 @@ function createCommentElem(comment) {
     var deleteButton = document.createElement('button');
     var smile = createSmileButton(jsonComment);
 
-    name.innerText = jsonComment.name;
-    date.innerText = convertTime(jsonComment.timestamp);
-    message.innerText = jsonComment.message;
+    name.innerHTML = jsonComment.name;
+    date.innerHTML = convertTime(jsonComment.timestamp);
+    message.innerHTML = jsonComment.message;
     deleteButton.innerHTML = "<i class='material-icons black-icon'>delete</i>";
     
     commentElem.classList.add("comment");
@@ -65,6 +65,7 @@ function createCommentElem(comment) {
 
     deleteButton.addEventListener("click", () => {
         deleteComment(jsonComment);
+        loadComments();
 
         // Remove the task from the DOM.
         commentElem.remove();
