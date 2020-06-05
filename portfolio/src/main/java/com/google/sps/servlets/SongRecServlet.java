@@ -72,13 +72,20 @@ public class SongRecServlet extends HttpServlet {
             }
 
         }
-        
+
+        response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;");
         response.getWriter().println(convertListToJson(songRecs));
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("encoding failed.");
+        }
 
         Entity songRecEntity = new Entity("SongRec");
         songRecEntity.setProperty("name", InputCleaner.clean(getParameter(request, "name").orElse("")));
