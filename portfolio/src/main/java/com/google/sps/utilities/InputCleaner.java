@@ -22,20 +22,17 @@ public class InputCleaner {
 
     //HashMap that stores an ASCII value as a key and its HTML entity
     private static HashMap<Integer, String> charToEntity;
-
-    public InputCleaner() {
-
-        charToEntity = new HashMap<Integer, String>();
-
+    static
+    { 
+        charToEntity = new HashMap<Integer, String>(); 
         //common HTML character ASCII codes and their HTML entities
         charToEntity.put(38, "&amp;"); // &
         charToEntity.put(60, "&lt;"); // <
         charToEntity.put(62, "&gt;"); // >
-        charToEntity.put(34, "&quot"); // "
+        charToEntity.put(34, "&quot;"); // "
         charToEntity.put(39, "&#x27;"); // '
         charToEntity.put(47, "&#x2F;"); // /
-
-    }
+    } 
 
     /**
     * Replaces common HTML characters with their HTML entities to prevent HTML injection.
@@ -48,10 +45,11 @@ public class InputCleaner {
 
         for(int i = 0; i < characters.length; i++) {
             //if the character is in the HashMap, it is a common HTML character and needs to be replaced
-            if(charToEntity.containsKey(characters[i])) {
-                cleanString[i] = charToEntity.get(characters[i]);
+            char c = characters[i];
+            if(charToEntity.containsKey((int) c)) {
+                cleanString[i] = charToEntity.get((int) c);
             } else {
-                cleanString[i] = Character.toString(characters[i]);
+                cleanString[i] = Character.toString(c);
             }
         }
 
