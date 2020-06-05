@@ -33,6 +33,11 @@
         <artifactId>appengine-api-1.0-sdk</artifactId>
         <version>1.9.59</version>
     </dependency>
+    <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>javax.mail-api</artifactId>
+        <version>1.6.2</version>
+    </dependency>
   </dependencies>
 
   <build>
