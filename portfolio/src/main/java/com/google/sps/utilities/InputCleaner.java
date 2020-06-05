@@ -40,26 +40,6 @@ public class InputCleaner {
     */
     public static String clean(String str) {
 
-        String htmlRemoved = removeHTML(str);
-        String emptyLinesRemoved = removeWhitespace(htmlRemoved);
-        return emptyLinesRemoved;
-    }
-
-    /**
-    * Removes empty lines and spaces from input string using regex.
-    * @return String
-    */
-    private static String removeWhitespace(String str) {
-
-        //regex from https://stackoverflow.com/questions/4123385/remove-all-empty-lines#:~:text=You%20can%20remove%20empty%20lines,string%20having%20the%20empty%20lines.
-       return str.replaceAll("(?m)^[ \t]*\r?\n", "");
-    }
-
-    /**
-    * Replaces common HTML characters with their HTML entities to prevent HTML injection.
-    * @return String
-    */
-    private static String removeHTML(String str) {
         char[] characters = str.toCharArray();
         String[] cleanString = new String[str.length()];
 
@@ -74,7 +54,6 @@ public class InputCleaner {
         }
 
         return String.join("", cleanString);
-
     }
 
 }
