@@ -85,6 +85,7 @@ public class DataServlet extends HttpServlet {
                 break;
             }
         }
+        response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;");
         response.getWriter().println(convertListToJson(comments));
     }
@@ -105,6 +106,12 @@ public class DataServlet extends HttpServlet {
     private Entity createCommentEntity(HttpServletRequest request) {
         long timestamp = System.currentTimeMillis();
 
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("encoding failed.");
+        }
+        
         Entity commentEntity = new Entity("Comment");
         String name = cleaner.clean(getParameter(request, "name").orElse("Anonymous"));
         String message = cleaner.clean(getParameter(request, "message").orElse(""));
