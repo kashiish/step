@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Kashish's Portfolio</title>
+        <link rel="stylesheet" href="css/style.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <script src="js/script.js"></script>
+        <script src="js/song-rec.js"></script>
+    </head>
+    <body onload="loadSongRecs()">
+        <div id="song-rec-content">
+            <ul id="slide-out" class="sidenav">
+                <li><div class="user-view">
+                        <div class="background">
+                            <img src="images/sky.jpg"/>
+                        </div>
+                        <a href="#user"><img class="circle" src="images/kashish.JPG"></a>
+                        <a href="#name"><span class="white-text name">Kashish Arora</span></a>
+                        <a href="#email"><span class="white-text email">kashisharora@google.com</span></a>
+                        <div id="social">
+                            <a href="https://www.linkedin.com/in/kashish-a/" target="_blank">
+                                <img class="social-icon" src="images/linkedin.png"/>
+                            </a>
+
+                            <a href="https://github.com/kashiish" target="_blank">
+                                <img class="social-icon" src="images/github.png"/>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="/index.html#about" class="sidenav-close">About</a></li>
+                <li><a href="/index.html#work" class="sidenav-close">Experience</a></li>
+                <li><a href="/index.html#projects" class="sidenav-close">Projects</a></li>
+                <li><a href="/index.html#skills" class="sidenav-close">Technical Skills</a></li>
+                <li><a href="/index.html#contact" class="sidenav-close">Contact</a></li>
+                <li><div class="divider"></div></li>
+                <li><a href="/song-rec.html" class="sidenav-close">Leave me a song recommendation!</a></li>
+            </ul>
+            <a href="#" data-target="slide-out" class="sidenav-trigger" id="sidenav-link"><i class="material-icons black-icon" id="nav-icon">menu</i></a>
+            <div id="song-rec-info">
+                <p>My music library consists of a lot of modern/alternative rock, pop, and R&ampB. My dad was a huge fan on Michael Jackson and played his music all the time 
+                    while I was growing up, so naturally he became one of my favorite artists. Other than that, I'm a huge fan of Frank Ocean, the Neighbourhood, and Daughter.
+                    To the right, you'll find a Spotify playlist with some of my favorite songs. I'm always looking for new music to listen to, so leave a suggestion below 
+                    whether it's one of your favorite songs or a song you think I'll like!</p>
+            </div>
+            <iframe src="https://open.spotify.com/embed/playlist/6pnGoLj9zTwRakzEglBrKX" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        </div>
+        <div id="song-rec-form">
+            <form action="/recs" method="POST">
+                <div class="input-field col s6">
+                    <i class="material-icons prefix">music_note</i>
+                    <input name="name" type="text" class="validate" required="" aria-required="true">
+                    <label>Leave a suggestion</label>
+                </div>
+            </form>
+            <h6 style="font-weight: bold; padding-top: 3%; padding-bottom: 1%;">Top Song Recommendations:</h6>
+            <div id="rec-container"></div>
+            <a id="load-more-button" class="waves-effect waves-light btn" onclick="loadMoreSongRecs()">Load more</a>
+        </div>
+        <script type="text/javascript" src="js/materialize.js"></script>
+    </body>
+</html>
