@@ -43,10 +43,6 @@ public class DataServlet extends HttpServlet {
     private final String[] sortTypes =  new String[]{"newest", "oldest", "popular"};
     private InputCleaner cleaner;
 
-    public void init() {
-        cleaner = new InputCleaner();
-    }
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int maxComments = getMaxCommentParam(request, response);
@@ -113,9 +109,8 @@ public class DataServlet extends HttpServlet {
         }
         
         Entity commentEntity = new Entity("Comment");
-        String name = cleaner.clean(getParameter(request, "name").orElse("Anonymous"));
-        String message = cleaner.clean(getParameter(request, "message").orElse(""));
-
+        String name = InputCleaner.clean(getParameter(request, "name").orElse("Anonymous"));
+        String message = InputCleaner.clean(getParameter(request, "message").orElse(""));
 
         commentEntity.setProperty("name", name);
         commentEntity.setProperty("message", message);
