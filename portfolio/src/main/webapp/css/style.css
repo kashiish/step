@@ -209,18 +209,15 @@ html, body {
 }
 
 #song-rec-content {
-    background-image: url("/images/headphones.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    height: 700px;
+    background: linear-gradient(295deg, rgba(223,167,5,1) 0%, rgba(250,204,34,1) 35%);
+    height: 600px;
 }
 
 #song-rec-info {
     background-color: rgba(0,0,0,0.1);
     position: absolute;
-    bottom: 50%;
-    left: 5%;
+    top: 20%;
+    left: 15%;
     width: 40%;
 }
 
@@ -254,4 +251,10 @@ html, body {
     display: none;
     width: fit-content;
     margin-top: 2%;
+}
+
+iframe {
+    position: absolute;
+    top: 15%;
+    right: 20%;
 }
