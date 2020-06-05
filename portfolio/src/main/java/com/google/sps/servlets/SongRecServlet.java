@@ -14,8 +14,10 @@
 
 package com.google.sps.servlets;
 
-import java.io.IOException;
 import com.google.sps.data.SongRec;
+import com.google.sps.utilities.InputCleaner;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +39,6 @@ import java.util.Optional;
 public class SongRecServlet extends HttpServlet {
 
     private final long NUM_RECS_TO_LOAD = 5;
-
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -80,7 +81,7 @@ public class SongRecServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         Entity songRecEntity = new Entity("SongRec");
-        songRecEntity.setProperty("name", getParameter(request, "name").orElse(""));
+        songRecEntity.setProperty("name", InputCleaner.clean(getParameter(request, "name").orElse("")));
         songRecEntity.setProperty("numLikes", 0);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
