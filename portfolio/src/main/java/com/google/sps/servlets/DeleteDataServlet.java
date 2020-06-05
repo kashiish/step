@@ -35,6 +35,8 @@ public class DeleteDataServlet extends HttpServlet {
         Key commentEntityKey = KeyFactory.createKey("Comment", id);
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.delete(commentEntityKey);
+
+        response.sendRedirect("/comments.html");
     
     }
 
