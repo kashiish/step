@@ -128,8 +128,13 @@ public class DataServlet extends HttpServlet {
         try {
             maxComments = Integer.parseInt(getParameter(request, "max-comments").orElse(Integer.toString(MAX_COMMENTS_DEFAULT)));
             
+            //if the user selects all comments
+            if(maxComments == 0) {
+                maxComments = Integer.MAX_VALUE;
+            }
+            
             //if user input is negative or 0
-            if(maxComments <= 0) {
+            if(maxComments < 0) {
                 response.getWriter().println("Invalid value for max-comments.");
                 maxComments = MAX_COMMENTS_DEFAULT;
             }
