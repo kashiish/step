@@ -107,14 +107,14 @@ html, body {
     font-weight: bold;
 }
 
-.comment-name, .comment-date {
+.comment-email, .comment-date {
     margin: 0;
     display: inline-block;
+    color: gray;
 }
 
 .comment-date {
     float: right;
-    color: gray;
 }
 
 .comment-message {

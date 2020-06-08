@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var instances = M.FormSelect.init(elems);
 });
 
-//Checks if the user is logged in. If so, it displays the comment form and comments and creates a logout button.
+//Checks if the user is logged in. If so, it displays the comment form and creates a logout button.
 //If not, it adds a message asking the user to login with a login button.
 function checkLogin() {
     fetch("/login").then(response => response.json()).then((status) => {
@@ -90,18 +90,21 @@ function createCommentElem(comment) {
 
     var commentElem = document.createElement("div");
     var name = document.createElement("h6");
-    var date = document.createElement("p")
+    var email = document.createElement("p");
+    var date = document.createElement("p");
     var message = document.createElement("p");
     var deleteButton = document.createElement('button');
     var smile = createSmileButton(jsonComment);
 
     name.innerHTML = jsonComment.name;
+    email.innerHTML = jsonComment.email;
     date.innerHTML = convertTime(jsonComment.timestamp);
     message.innerHTML = jsonComment.message;
     deleteButton.innerHTML = "<i class='material-icons black-icon'>delete</i>";
     
     commentElem.classList.add("comment");
     name.classList.add("comment-name");
+    email.classList.add("comment-email");
     date.classList.add("comment-date");
     message.classList.add("comment-message");
     deleteButton.classList.add("delete-comment")
@@ -115,6 +118,7 @@ function createCommentElem(comment) {
   });
 
     commentElem.appendChild(name);
+    commentElem.appendChild(email);
     commentElem.appendChild(date);
     commentElem.appendChild(message);
     commentElem.appendChild(deleteButton);
