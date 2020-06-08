@@ -23,6 +23,11 @@ function loadComments() {
     fetch('/data?max-comments='+getSelection("max-comments")+"&sort-type="+getSelection("sort-type")).then(response => response.json()).then((comments) => {
         var commentContainer = document.getElementById('comment-container');
         commentContainer.innerHTML = "";
+        //if there are no comments
+        if(comments.length == 0 ) {
+            commentContainer.innerText = "Nothing to see here.";
+            return;
+        }
         //create a div element for each of the commments in the comments array
         var commentElems = comments.map(createCommentElem);
         //append each commentElem to commentContainer
@@ -66,7 +71,6 @@ function createCommentElem(comment) {
     deleteButton.addEventListener("click", () => {
         deleteComment(jsonComment);
         loadComments();
-
         // Remove the task from the DOM.
         commentElem.remove();
   });
