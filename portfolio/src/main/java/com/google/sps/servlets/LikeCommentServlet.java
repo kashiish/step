@@ -74,9 +74,10 @@ public class LikeCommentServlet extends HttpServlet {
 
         String userId = userService.getCurrentUser().getUserId();
 
-        Entity entity = new Entity("UserInfo", userId);
+        Entity entity = new Entity("UserInfo");
 
         entity.setProperty("commentId", commentId);
+        entity.setProperty("userId", userId);
 
         datastore.put(entity);
 
