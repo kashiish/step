@@ -18,10 +18,44 @@ document.addEventListener('DOMContentLoaded', function() {
     var instances = M.FormSelect.init(elems);
 });
 
+//Checks if the user is logged in. If so, it displays the comment form and comments and creates a logout button.
+//If not, it adds a message asking the user to login with a login button.
 function checkLogin() {
     fetch("/login").then(response => response.json()).then((status) => {
-        console.log(status);
+        commentSection = document.getElementById("comment-section");
+        if(status.loggedIn) {
+            commentSection.insertBefore(createButtonWithLink("Logout", status.url), commentSection.firstChild);
+            document.getElementById("comment-form").style.display = "block";
+            loadComments();
+        } else {
+            var container = document.createElement("div");
+            var message = document.createElement("p");
+
+            message.innerText = "Please login to write and see comments.";
+
+            container.appendChild(message);
+            container.appendChild(createButtonWithLink("Login", status.url));
+
+            container.setAttribute("id", "login-message");
+
+            commentSection.appendChild(container);
+
+        }
     });
+}
+
+//Creates an anchor tag with button styling. The text and link of the button is determined by the parameters buttonText and url.
+function createButtonWithLink(buttonText, url) {
+    var button = document.createElement("a");
+    button.innerText = buttonText;
+    button.classList.add("waves-effect");
+    button.classList.add("waves-light");
+    button.classList.add("btn-small");
+    //add an ID to the button that contains the buttonText in lowercase
+    button.setAttribute("id", buttonText.toLowerCase() + "-button");
+    button.setAttribute("href", url);
+
+    return button;
 }
 
 //Requests comments from DataServlet and adds it to the page.
