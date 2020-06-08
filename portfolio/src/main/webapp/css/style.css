@@ -272,3 +272,16 @@ iframe {
 .white-icon {
     color:white;
 }
+
+#comment-form {
+    display: none;
+}
+
+#logout-button {
+    float: right;
+    margin-top: 1%;
+}
+
+#login-message {
+    text-align: center;
+}
