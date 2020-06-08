@@ -69,11 +69,12 @@ public class DataServlet extends HttpServlet {
         for (Entity entity : results.asIterable()) {
             String name = (String) entity.getProperty("name");
             String message = (String) entity.getProperty("message");
+            String email = (String) entity.getProperty("email");
             long timestamp = (long) entity.getProperty("timestamp");
             long numLikes = (long) entity.getProperty("numLikes");
             long id = entity.getKey().getId();
 
-            Comment comment = new Comment(name, message, timestamp, numLikes, id);
+            Comment comment = new Comment(name, message, email, timestamp, numLikes, id);
             comments.add(comment);
             numComments++;
             
