@@ -26,19 +26,18 @@ function checkLogin() {
         if(status.loggedIn) {
             commentSection.insertBefore(createButtonWithLink("Logout", status.url), commentSection.firstChild);
             document.getElementById("comment-form").style.display = "block";
-            loadComments();
         } else {
             var container = document.createElement("div");
             var message = document.createElement("p");
 
-            message.innerText = "Please login to write and see comments.";
+            message.innerText = "Please login to write comments.";
 
             container.appendChild(message);
             container.appendChild(createButtonWithLink("Login", status.url));
 
             container.setAttribute("id", "login-message");
 
-            commentSection.appendChild(container);
+            commentSection.insertBefore(container, document.getElementById("comment-form"));
 
         }
     });
