@@ -7,10 +7,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <script src="js/script.js"></script>
-    <script src="js/comment.js"></script>
   </head>
-  <body onload="loadComments()">
+  <body onload="checkLogin(); loadComments();">
     <div id="content">
         <ul id="slide-out" class="sidenav">
             <li><div class="user-view">
@@ -43,11 +41,11 @@
         <div class="parallax-container">
             <div class="parallax"><img src="images/waterfall.jpg"></div>
         </div>
-        <div id="comment" class="section white">
-            <div class="row container">
+        <div class="section white">
+            <div id="comment-section" class="row container">
                 <h2 class="header">Thoughts?</h2>
-                <h6 style="margin-left:4px;">Leave a comment below!</h6>
-                <div class="row">
+                <h6 style="margin-left:0.5%;">Leave a comment below!</h6>
+                <div id="comment-form" class="row">
                     <form class="col s12" action="/data" method="POST">
                         <div class="row">
                             <div class="input-field col s6 comment-form-input">
@@ -90,5 +88,7 @@
         </div> 
     </div>
     <script type="text/javascript" src="js/materialize.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/comment.js"></script>
   </body>
 </html>
