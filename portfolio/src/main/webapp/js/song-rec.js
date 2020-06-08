@@ -78,7 +78,7 @@ function createRecElem(rec) {
     var recName = document.createElement("p");
     var plusOneButton = createPlusOneButton(jsonRec);
 
-    recName.innerText = jsonRec.name;
+    recName.innerHTML = jsonRec.name;
 
     container.classList.add("song-rec");
 

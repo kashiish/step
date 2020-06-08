@@ -15,7 +15,9 @@
 package com.google.sps.servlets;
 
 import com.google.sps.data.Comment;
+import com.google.sps.utilities.InputCleaner;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,7 @@ public class DataServlet extends HttpServlet {
 
     private final int MAX_COMMENTS_DEFAULT = 5;
     private final String[] sortTypes =  new String[]{"newest", "oldest", "popular"};
+    private InputCleaner cleaner;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -78,7 +81,7 @@ public class DataServlet extends HttpServlet {
                 break;
             }
         }
-        
+        response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;");
         response.getWriter().println(convertListToJson(comments));
     }
@@ -87,16 +90,34 @@ public class DataServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         long timestamp = System.currentTimeMillis();
 
-        Entity commentEntity = new Entity("Comment");
-        commentEntity.setProperty("name", getParameter(request, "name").orElse("Anonymous"));
-        commentEntity.setProperty("message", getParameter(request, "message").orElse(""));
-        commentEntity.setProperty("timestamp", timestamp);
-        commentEntity.setProperty("numLikes", 0);
+        Entity commentEntity = createCommentEntity(request);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(commentEntity);
     
         response.sendRedirect("/comments.html");
+
+    }
+
+    private Entity createCommentEntity(HttpServletRequest request) {
+        long timestamp = System.currentTimeMillis();
+
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("encoding failed.");
+        }
+        
+        Entity commentEntity = new Entity("Comment");
+        String name = InputCleaner.clean(getParameter(request, "name").orElse("Anonymous"));
+        String message = InputCleaner.clean(getParameter(request, "message").orElse(""));
+
+        commentEntity.setProperty("name", name);
+        commentEntity.setProperty("message", message);
+        commentEntity.setProperty("timestamp", timestamp);
+        commentEntity.setProperty("numLikes", 0);
+
+        return commentEntity;
 
     }
 
