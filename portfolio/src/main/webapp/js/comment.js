@@ -18,6 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
     var instances = M.FormSelect.init(elems);
 });
 
+function checkLogin() {
+    fetch("/login").then(response => response.json()).then((status) => {
+        console.log(status);
+    });
+}
+
 //Requests comments from DataServlet and adds it to the page.
 function loadComments() {
     fetch('/data?max-comments='+getSelection("max-comments")+"&sort-type="+getSelection("sort-type")).then(response => response.json()).then((comments) => {
