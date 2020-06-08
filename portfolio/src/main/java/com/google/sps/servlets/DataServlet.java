@@ -102,6 +102,15 @@ public class DataServlet extends HttpServlet {
     private Entity createCommentEntity(HttpServletRequest request) {
         long timestamp = System.currentTimeMillis();
 
+        //used to get current user's email to attach to comments
+        UserService userService = UserServiceFactory.getUserService();
+
+        // Only logged-in users can write comments
+        if (!userService.isUserLoggedIn()) {
+            response.sendRedirect("/comments.html");
+            return;
+        }
+
         try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -111,9 +120,11 @@ public class DataServlet extends HttpServlet {
         Entity commentEntity = new Entity("Comment");
         String name = InputCleaner.clean(getParameter(request, "name").orElse("Anonymous"));
         String message = InputCleaner.clean(getParameter(request, "message").orElse(""));
+        String email = userService.getCurrentUser().getEmail();
 
         commentEntity.setProperty("name", name);
         commentEntity.setProperty("message", message);
+        commentEntity.setProperty("email", email);
         commentEntity.setProperty("timestamp", timestamp);
         commentEntity.setProperty("numLikes", 0);
 
