@@ -22,6 +22,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.users.UserService;  
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -69,11 +71,12 @@ public class DataServlet extends HttpServlet {
         for (Entity entity : results.asIterable()) {
             String name = (String) entity.getProperty("name");
             String message = (String) entity.getProperty("message");
+            String email = (String) entity.getProperty("email");
             long timestamp = (long) entity.getProperty("timestamp");
             long numLikes = (long) entity.getProperty("numLikes");
             long id = entity.getKey().getId();
 
-            Comment comment = new Comment(name, message, timestamp, numLikes, id);
+            Comment comment = new Comment(name, message, email, timestamp, numLikes, id);
             comments.add(comment);
             numComments++;
             
@@ -90,18 +93,31 @@ public class DataServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         long timestamp = System.currentTimeMillis();
 
-        Entity commentEntity = createCommentEntity(request);
-
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        //used to get current user's email to attach to comments
+        UserService userService = UserServiceFactory.getUserService();
+
+        // Only logged-in users can write comments
+        if (!userService.isUserLoggedIn()) {
+            response.sendRedirect("/comments.html");
+            return;
+        }
+
+        Entity commentEntity = createCommentEntity(request, userService);
         datastore.put(commentEntity);
     
         response.sendRedirect("/comments.html");
 
     }
 
-    private Entity createCommentEntity(HttpServletRequest request) {
+    /**
+    * Creates a new Comment entity with data from the comment form and UserService. 
+    * @return Entity
+    */
+    private Entity createCommentEntity(HttpServletRequest request, UserService userService) {
         long timestamp = System.currentTimeMillis();
 
+        //use UTF-8 encoding to support different languages
         try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -111,9 +127,11 @@ public class DataServlet extends HttpServlet {
         Entity commentEntity = new Entity("Comment");
         String name = InputCleaner.clean(getParameter(request, "name").orElse("Anonymous"));
         String message = InputCleaner.clean(getParameter(request, "message").orElse(""));
+        String email = userService.getCurrentUser().getEmail();
 
         commentEntity.setProperty("name", name);
         commentEntity.setProperty("message", message);
+        commentEntity.setProperty("email", email);
         commentEntity.setProperty("timestamp", timestamp);
         commentEntity.setProperty("numLikes", 0);
 
