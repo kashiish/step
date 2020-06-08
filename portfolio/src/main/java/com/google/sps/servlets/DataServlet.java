@@ -22,6 +22,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.users.UserService;  
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -91,18 +93,7 @@ public class DataServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         long timestamp = System.currentTimeMillis();
 
-        Entity commentEntity = createCommentEntity(request);
-
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        datastore.put(commentEntity);
-    
-        response.sendRedirect("/comments.html");
-
-    }
-
-    private Entity createCommentEntity(HttpServletRequest request) {
-        long timestamp = System.currentTimeMillis();
-
         //used to get current user's email to attach to comments
         UserService userService = UserServiceFactory.getUserService();
 
@@ -112,6 +103,21 @@ public class DataServlet extends HttpServlet {
             return;
         }
 
+        Entity commentEntity = createCommentEntity(request, userService);
+        datastore.put(commentEntity);
+    
+        response.sendRedirect("/comments.html");
+
+    }
+
+    /**
+    * Creates a new Comment entity with data from the comment form and UserService. 
+    * @return Entity
+    */
+    private Entity createCommentEntity(HttpServletRequest request, UserService userService) {
+        long timestamp = System.currentTimeMillis();
+
+        //use UTF-8 encoding to support different languages
         try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException e) {
