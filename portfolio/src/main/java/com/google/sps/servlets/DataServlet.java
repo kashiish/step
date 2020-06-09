@@ -134,7 +134,7 @@ public class DataServlet extends HttpServlet {
         long numLikes = (long) entity.getProperty("numLikes");
         long id = entity.getKey().getId();
         boolean isLiked = isCommentLikedByUser(datastore, id);
-        String langaugeCode = getCommentLanguage(message);
+        String languageCode = getCommentLanguage(message);
 
         try {
             comment = new CommentBuilder().setName(name)
@@ -143,7 +143,7 @@ public class DataServlet extends HttpServlet {
                                         .setTimestamp(timestamp)
                                         .setNumLikes(numLikes)
                                         .setIsLiked(isLiked)
-                                        .setLanguageCode(langaugeCode)
+                                        .setLanguageCode(languageCode)
                                         .setId(id).build();
         } catch (NullPointerException e) {
             System.out.println("Missing field (message, timestamp, or id) in comment.");
