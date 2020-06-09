@@ -30,6 +30,9 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
+import com.google.appengine.api.datastore.Query.CompositeFilter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import java.lang.String;
 import com.google.gson.Gson;
 import java.util.ArrayList;
@@ -75,8 +78,9 @@ public class DataServlet extends HttpServlet {
             long timestamp = (long) entity.getProperty("timestamp");
             long numLikes = (long) entity.getProperty("numLikes");
             long id = entity.getKey().getId();
+            boolean liked = isCommentLikedByUser(datastore, id);
 
-            Comment comment = new Comment(name, message, email, timestamp, numLikes, id);
+            Comment comment = new Comment(name, message, email, timestamp, numLikes, liked, id);
             comments.add(comment);
             numComments++;
             
@@ -108,6 +112,36 @@ public class DataServlet extends HttpServlet {
     
         response.sendRedirect("/comments.html");
 
+    }
+
+    /**
+    * Determines if a comment is liked by the current user (if the user is logged in). 
+    * @return boolean: if the user is not logged in returns false, if the user is logged in and there is a Like entity matching the userId and commentId returns true
+    */
+    private boolean isCommentLikedByUser(DatastoreService datastore, long commentId) {
+        UserService userService = UserServiceFactory.getUserService();
+
+        // Only save comments for logged-in users 
+        if (!userService.isUserLoggedIn()) {
+            return false;
+        }
+
+        String userId = userService.getCurrentUser().getUserId();
+
+        CompositeFilter filter = CompositeFilterOperator.and(FilterOperator.EQUAL.of("userId", userId), FilterOperator.EQUAL.of("commentId", commentId));
+        Query query = new Query("Like").setFilter(filter);
+
+        PreparedQuery pq = datastore.prepare(query);
+       
+        //there should at most only be 1 result
+        Entity result = pq.asSingleEntity();
+
+        //if there was no entity that matched the userId and commentId, then the user has not liked the comment
+        if(result == null) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
