@@ -9,14 +9,16 @@ public final class Comment {
     private final String email;
     private final long timestamp;
     private final long numLikes;
+    private final boolean liked;
     private final long id;
 
-    public Comment(String name, String message, String email, long timestamp, long numLikes, long id) {
+    public Comment(String name, String message, String email, long timestamp, long numLikes, boolean liked, long id) {
         this.name = name;
         this.message = message;
         this.email = email;
         this.timestamp = timestamp;
         this.numLikes = numLikes;
+        this.liked = liked;
         this.id = id;
     }
 
@@ -38,6 +40,10 @@ public final class Comment {
 
     public long getNumLikes() {
         return this.numLikes;
+    }
+
+    public boolean isLiked() {
+        return this.liked;
     }
 
     public long getId() {
