@@ -74,7 +74,7 @@ public class LikeCommentServlet extends HttpServlet {
 
         String userId = userService.getCurrentUser().getUserId();
 
-        Entity entity = new Entity("UserInfo");
+        Entity entity = new Entity("Like", userId);
 
         entity.setProperty("commentId", commentId);
         entity.setProperty("userId", userId);

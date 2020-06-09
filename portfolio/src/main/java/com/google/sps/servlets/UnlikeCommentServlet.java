@@ -80,7 +80,7 @@ public class UnlikeCommentServlet extends HttpServlet {
         //create a filter
         //need to find entity that has userId of the current user and commentId of the comment the user unliked
         CompositeFilter filter = CompositeFilterOperator.and(FilterOperator.EQUAL.of("userId", userId), FilterOperator.EQUAL.of("commentId", commentId));
-        Query query = new Query("UserInfo").setFilter(filter);
+        Query query = new Query("Like").setFilter(filter);
 
         PreparedQuery pq = datastore.prepare(query);
        
