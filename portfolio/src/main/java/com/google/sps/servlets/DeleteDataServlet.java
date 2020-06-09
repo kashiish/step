@@ -23,6 +23,11 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 
 /** Servlet that deletes comments from Datastore. */
 @WebServlet("/delete-data")
@@ -35,7 +40,26 @@ public class DeleteDataServlet extends HttpServlet {
         Key commentEntityKey = KeyFactory.createKey("Comment", id);
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.delete(commentEntityKey);
+
+        deleteLikes(datastore, id);
     
+    }
+
+    /**
+    * Delete all Like entities that have given commentId.
+    */
+    private void deleteLikes(DatastoreService datastore, long commentId) {
+
+        //get all Like entities that have given commentId using a Filter
+        Filter filter = FilterOperator.EQUAL.of("commentId", commentId);
+        Query query = new Query("Like").setFilter(filter);
+
+        PreparedQuery results = datastore.prepare(query);
+       
+        for(Entity entity : results.asIterable()) {
+            datastore.delete(entity.getKey());
+        }
+
     }
 
 }

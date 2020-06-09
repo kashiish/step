@@ -19,6 +19,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.users.UserService;  
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Key;
@@ -49,11 +51,36 @@ public class LikeCommentServlet extends HttpServlet {
 
             datastore.put(commentEntity);
 
+            saveLikedComment(datastore, id);
+
         } catch (EntityNotFoundException e)  {
             response.setContentType("text/html");
             response.getWriter().println("Entity not found.");
         }
     
+    }
+
+    /*
+    * Creates a new UserInfo entity that stores the current user's id and the id of the comment that was liked.
+    */
+    private void saveLikedComment(DatastoreService datastore, long commentId) {
+        
+        UserService userService = UserServiceFactory.getUserService();
+
+        // Only save comments for logged-in users 
+        if (!userService.isUserLoggedIn()) {
+            return;
+        }
+
+        String userId = userService.getCurrentUser().getUserId();
+
+        Entity entity = new Entity("Like", userId);
+
+        entity.setProperty("commentId", commentId);
+        entity.setProperty("userId", userId);
+
+        datastore.put(entity);
+
     }
 
 }

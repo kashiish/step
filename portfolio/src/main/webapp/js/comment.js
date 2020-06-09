@@ -136,7 +136,8 @@ function createSmileButton(comment) {
     var numLikesLabel = document.createElement("span");
 
     numLikesLabel.innerText = comment.numLikes;
-    button.innerHTML = "<i class='material-icons smile'>emoji_emotions</i>";
+    //add "press" class to icon if comment is liked
+    button.innerHTML = "<i class='material-icons smile " + (comment.isLiked ? "press" : "") + "'>emoji_emotions</i>";
 
     container.classList.add("smile-container");
     button.classList.add("smile-button");
