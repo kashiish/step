@@ -26,8 +26,23 @@ import com.google.cloud.translate.Translation;
 @WebServlet("/translate")
 public class TranslationServlet extends HttpServlet {
 
- @Override
- public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
-  }
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String originalMessage = request.getParameter("message");
+        String languageCode = request.getParameter("languageCode");
+
+        // API
+        // Translate translate = TranslateOptions.getDefaultInstance().getService();
+        // Translation translation =
+        //     translate.translate(originalText, Translate.TranslateOption.targetLanguage(languageCode));
+        // String translatedMessage = translation.getTranslatedText();
+
+        // TESTING
+        String translatedMessage = "This is your translated message.";
+
+        response.setContentType("plain/text; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().println(translatedMessage);
+        
+    }
 }
