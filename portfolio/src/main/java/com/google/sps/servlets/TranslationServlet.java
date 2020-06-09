@@ -25,7 +25,7 @@ import com.google.cloud.translate.Translation;
 
 @WebServlet("/translate")
 public class TranslationServlet extends HttpServlet {
-
+    
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String originalMessage = request.getParameter("message");
