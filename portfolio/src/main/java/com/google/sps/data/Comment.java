@@ -23,37 +23,37 @@ public final class Comment {
             this.isLiked = false;
         }
 
-        public CommentBuilder name(String name) {
+        public CommentBuilder setName(String name) {
             this.name = name;
             return this;
         }
 
-        public CommentBuilder message(String message) {
+        public CommentBuilder setMessage(String message) {
             this.message = message;
             return this;
         }
 
-        public CommentBuilder email(String email) {
+        public CommentBuilder setEmail(String email) {
             this.email = email;
             return this;
         }
 
-        public CommentBuilder timestamp(long timestamp) {
+        public CommentBuilder setTimestamp(long timestamp) {
             this.timestamp = timestamp;
             return this;
         }
 
-        public CommentBuilder numLikes(long numLikes) {
+        public CommentBuilder setNumLikes(long numLikes) {
             this.numLikes = numLikes;
             return this;
         }
 
-        public CommentBuilder isLiked(boolean isLiked) {
+        public CommentBuilder setIsLiked(boolean isLiked) {
             this.isLiked = isLiked;
             return this;
         }
 
-        public CommentBuilder id(long id) {
+        public CommentBuilder setId(long id) {
             this.id = id;
             return this;
         }

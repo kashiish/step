@@ -131,13 +131,13 @@ public class DataServlet extends HttpServlet {
         boolean isLiked = isCommentLikedByUser(datastore, id);
 
         try {
-            comment = new CommentBuilder().name(name)
-                                        .message(message)
-                                        .email(email)
-                                        .timestamp(timestamp)
-                                        .numLikes(numLikes)
-                                        .isLiked(isLiked)
-                                        .id(id).build();
+            comment = new CommentBuilder().setName(name)
+                                        .setMessage(message)
+                                        .setEmail(email)
+                                        .setTimestamp(timestamp)
+                                        .setNumLikes(numLikes)
+                                        .setIsLiked(isLiked)
+                                        .setId(id).build();
         } catch (NullPointerException e) {
             System.out.println("Missing field (message, timestamp, or id) in comment.");
             comment = null;
