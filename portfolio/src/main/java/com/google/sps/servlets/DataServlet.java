@@ -15,6 +15,7 @@
 package com.google.sps.servlets;
 
 import com.google.sps.data.Comment;
+import com.google.sps.data.Comment.CommentBuilder;
 import com.google.sps.utilities.InputCleaner;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -72,15 +73,13 @@ public class DataServlet extends HttpServlet {
         ArrayList<Comment> comments = new ArrayList<Comment>();
         int numComments = 0;
         for (Entity entity : results.asIterable()) {
-            String name = (String) entity.getProperty("name");
-            String message = (String) entity.getProperty("message");
-            String email = (String) entity.getProperty("email");
-            long timestamp = (long) entity.getProperty("timestamp");
-            long numLikes = (long) entity.getProperty("numLikes");
-            long id = entity.getKey().getId();
-            boolean liked = isCommentLikedByUser(datastore, id);
+            
+            Comment comment = createComment(entity, datastore);
+            
+            if(comment == null) {
+                continue;
+            }
 
-            Comment comment = new Comment(name, message, email, timestamp, numLikes, liked, id);
             comments.add(comment);
             numComments++;
             
@@ -88,6 +87,7 @@ public class DataServlet extends HttpServlet {
                 break;
             }
         }
+
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;");
         response.getWriter().println(convertListToJson(comments));
@@ -111,6 +111,39 @@ public class DataServlet extends HttpServlet {
         datastore.put(commentEntity);
     
         response.sendRedirect("/comments.html");
+
+    }
+
+    /**
+    * Creates a new Comment object with the given entity. If required fields (message, timestamp, and id) are missing, returns null.
+    * @return Comment or null
+    */
+    private Comment createComment(Entity entity, DatastoreService datastore) {
+        
+        Comment comment;
+
+        String name = (String) entity.getProperty("name");
+        String message = (String) entity.getProperty("message");
+        String email = (String) entity.getProperty("email");
+        long timestamp = (long) entity.getProperty("timestamp");
+        long numLikes = (long) entity.getProperty("numLikes");
+        long id = entity.getKey().getId();
+        boolean isLiked = isCommentLikedByUser(datastore, id);
+
+        try {
+            comment = new CommentBuilder().name(name)
+                                        .message(message)
+                                        .email(email)
+                                        .timestamp(timestamp)
+                                        .numLikes(numLikes)
+                                        .isLiked(isLiked)
+                                        .id(id).build();
+        } catch (NullPointerException e) {
+            System.out.println("Missing field (message, timestamp, or id) in comment.");
+            comment = null;
+        }
+
+        return comment;
 
     }
 
