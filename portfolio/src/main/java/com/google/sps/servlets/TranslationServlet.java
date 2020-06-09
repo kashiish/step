@@ -25,7 +25,7 @@ import com.google.cloud.translate.Translation;
 
 @WebServlet("/translate")
 public class TranslationServlet extends HttpServlet {
-    
+
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String originalMessage = request.getParameter("message");
@@ -34,11 +34,11 @@ public class TranslationServlet extends HttpServlet {
         // API
         // Translate translate = TranslateOptions.getDefaultInstance().getService();
         // Translation translation =
-        //     translate.translate(originalText, Translate.TranslateOption.targetLanguage(languageCode));
+        //     translate.translate(originalMessage, Translate.TranslateOption.targetLanguage(languageCode));
         // String translatedMessage = translation.getTranslatedText();
 
         // TESTING
-        String translatedMessage = "This is your translated message.";
+        String translatedMessage = "Detta är ett prov.";
 
         response.setContentType("plain/text; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
