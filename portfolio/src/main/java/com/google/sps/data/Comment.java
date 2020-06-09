@@ -13,6 +13,7 @@ public final class Comment {
         private long timestamp;
         private long numLikes;
         private boolean isLiked;
+        private String languageCode;
         private long id;
 
         public CommentBuilder() {
@@ -21,6 +22,7 @@ public final class Comment {
             this.email = "anonymous";
             this.numLikes = 0;
             this.isLiked = false;
+            this.languageCode = "en";
         }
 
         public CommentBuilder setName(String name) {
@@ -52,6 +54,11 @@ public final class Comment {
             this.isLiked = isLiked;
             return this;
         }
+        
+        public CommentBuilder setLanguageCode(String languageCode) {
+            this.languageCode = languageCode;
+            return this;
+        }
 
         public CommentBuilder setId(long id) {
             this.id = id;
@@ -76,6 +83,7 @@ public final class Comment {
     private final long timestamp;
     private final long numLikes;
     private final boolean isLiked;
+    private final String languageCode;
     private final long id;
 
     private Comment(CommentBuilder builder) {
@@ -85,6 +93,7 @@ public final class Comment {
         this.timestamp = builder.timestamp;
         this.numLikes = builder.numLikes;
         this.isLiked = builder.isLiked;
+        this.languageCode = builder.languageCode;
         this.id = builder.id;
     }
 
@@ -110,6 +119,10 @@ public final class Comment {
 
     public boolean isLiked() {
         return this.isLiked;
+    }
+
+    public String getLanguageCode() {
+        return this.languageCode;
     }
 
     public long getId() {
