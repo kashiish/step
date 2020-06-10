@@ -93,7 +93,6 @@ function createCommentElem(comment) {
     var email = document.createElement("p");
     var date = document.createElement("p");
     var message = document.createElement("p");
-    var deleteButton = createDeleteButton(jsonComment, commentElem);
     var smile = createSmileButton(jsonComment);
 
     name.innerHTML = jsonComment.name;
@@ -121,7 +120,11 @@ function createCommentElem(comment) {
         
     }
 
-    commentElem.appendChild(deleteButton);
+    if(jsonComment.isAuthor) {
+         var deleteButton = createDeleteButton(jsonComment, commentElem);
+         commentElem.appendChild(deleteButton);
+    }
+
     commentElem.appendChild(smile);
 
     return commentElem;
