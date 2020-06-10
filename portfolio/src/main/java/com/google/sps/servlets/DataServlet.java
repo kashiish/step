@@ -30,6 +30,9 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -46,7 +49,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Arrays;
 import java.util.Random; 
-
 
 /** Servlet that returns comments from and adds comments to Datastore. */
 @WebServlet("/data")
@@ -137,6 +139,7 @@ public class DataServlet extends HttpServlet {
         long id = entity.getKey().getId();
         boolean isLiked = isCommentLikedByUser(datastore, id);
         String languageCode = getCommentLanguage(message);
+        boolean isAuthor = isUserAuthorOfComment(datastore, id);
 
         try {
             comment = new CommentBuilder().setName(name)
@@ -146,6 +149,7 @@ public class DataServlet extends HttpServlet {
                                         .setNumLikes(numLikes)
                                         .setIsLiked(isLiked)
                                         .setLanguageCode(languageCode)
+                                        .setIsAuthor(isAuthor)
                                         .setId(id).build();
         } catch (NullPointerException e) {
             System.out.println("Missing field (message, timestamp, or id) in comment.");
@@ -153,6 +157,40 @@ public class DataServlet extends HttpServlet {
         }
 
         return comment;
+
+    }
+
+    /**
+    * Determines if the current user is the author of the comment with id. 
+    * @return boolean
+    */
+    private boolean isUserAuthorOfComment(DatastoreService datastore, long id) {
+
+        UserService userService = UserServiceFactory.getUserService();
+
+        // Comments can only be submitted if a user is logged in, so a logged out user can never be the author
+        if (!userService.isUserLoggedIn()) {
+            return false;
+        }
+
+        String userId = userService.getCurrentUser().getUserId();
+
+        Key commentEntityKey = KeyFactory.createKey("Comment", id);
+
+        try {
+            Entity commentEntity = datastore.get(commentEntityKey);
+
+            //if the comment's userId matches the current user, then the current user is the author of the comment
+            if(commentEntity.getProperty("userId").equals(userId)) {
+                return true;
+            }
+            
+
+        } catch (EntityNotFoundException e)  {
+            System.out.println("Entity not found.");
+        }
+
+        return false;
 
     }
 
@@ -219,12 +257,14 @@ public class DataServlet extends HttpServlet {
         String name = InputCleaner.clean(getParameter(request, "name").orElse("Anonymous"));
         String message = InputCleaner.clean(getParameter(request, "message").orElse(""));
         String email = userService.getCurrentUser().getEmail();
+        String userId = userService.getCurrentUser().getUserId();
 
         commentEntity.setProperty("name", name);
         commentEntity.setProperty("message", message);
         commentEntity.setProperty("email", email);
         commentEntity.setProperty("timestamp", timestamp);
         commentEntity.setProperty("numLikes", 0);
+        commentEntity.setProperty("userId", userId);
 
         return commentEntity;
 
