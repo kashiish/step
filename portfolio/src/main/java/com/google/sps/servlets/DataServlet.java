@@ -34,11 +34,16 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.CompositeFilter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
+import com.google.cloud.translate.Detection;
 import java.lang.String;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Arrays;
+import java.util.Random; 
 
 
 /** Servlet that returns comments from and adds comments to Datastore. */
@@ -129,6 +134,7 @@ public class DataServlet extends HttpServlet {
         long numLikes = (long) entity.getProperty("numLikes");
         long id = entity.getKey().getId();
         boolean isLiked = isCommentLikedByUser(datastore, id);
+        String languageCode = getCommentLanguage(message);
 
         try {
             comment = new CommentBuilder().setName(name)
@@ -137,6 +143,7 @@ public class DataServlet extends HttpServlet {
                                         .setTimestamp(timestamp)
                                         .setNumLikes(numLikes)
                                         .setIsLiked(isLiked)
+                                        .setLanguageCode(languageCode)
                                         .setId(id).build();
         } catch (NullPointerException e) {
             System.out.println("Missing field (message, timestamp, or id) in comment.");
@@ -144,6 +151,24 @@ public class DataServlet extends HttpServlet {
         }
 
         return comment;
+
+    }
+
+    /**
+    * Determines the language of the message using the Google Cloud Translate API.
+    * @return String, language code
+    */
+    private String getCommentLanguage(String message) {
+        // API
+        // Translate translate = TranslateOptions.getDefaultInstance().getService();
+        // Detection detection = translate.detect(message);
+        // return detection.getLanguage();
+
+        //TESTING 
+        //return a random language code
+        String[] codes = {"en", "fr", "es"};
+        Random rand = new Random();
+        return codes[rand.nextInt(codes.length)];
 
     }
 

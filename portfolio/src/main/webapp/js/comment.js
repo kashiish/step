@@ -59,7 +59,7 @@ function createButtonWithLink(buttonText, url) {
 
 //Requests comments from DataServlet and adds it to the page.
 function loadComments() {
-    fetch('/data?max-comments='+getSelection("max-comments")+"&sort-type="+getSelection("sort-type")).then(response => response.json()).then((comments) => {
+    fetch("/data?max-comments="+getSelection("max-comments")+"&sort-type="+getSelection("sort-type")).then(response => response.json()).then((comments) => {
         var commentContainer = document.getElementById('comment-container');
         commentContainer.innerHTML = "";
         //if there are no comments
@@ -93,38 +93,91 @@ function createCommentElem(comment) {
     var email = document.createElement("p");
     var date = document.createElement("p");
     var message = document.createElement("p");
-    var deleteButton = document.createElement('button');
+    var deleteButton = createDeleteButton(jsonComment, commentElem);
     var smile = createSmileButton(jsonComment);
 
     name.innerHTML = jsonComment.name;
     email.innerHTML = jsonComment.email;
     date.innerHTML = convertTime(jsonComment.timestamp);
     message.innerHTML = jsonComment.message;
-    deleteButton.innerHTML = "<i class='material-icons black-icon'>delete</i>";
     
     commentElem.classList.add("comment");
     name.classList.add("comment-name");
     email.classList.add("comment-email");
     date.classList.add("comment-date");
     message.classList.add("comment-message");
-    deleteButton.classList.add("delete-comment")
-
-
-    deleteButton.addEventListener("click", () => {
-        deleteComment(jsonComment);
-        loadComments();
-        // Remove the task from the DOM.
-        commentElem.remove();
-  });
 
     commentElem.appendChild(name);
     commentElem.appendChild(email);
     commentElem.appendChild(date);
     commentElem.appendChild(message);
+
+
+    //if the comment is not in the language of where the user is, create a translate button
+    var userLanguageCode = navigator.language.split('-')[0];
+    if(jsonComment.languageCode !== userLanguageCode) {
+        var translateButton = createTranslateButton(message, jsonComment.message, userLanguageCode);
+        commentElem.appendChild(translateButton);
+        
+    }
+
     commentElem.appendChild(deleteButton);
     commentElem.appendChild(smile);
 
     return commentElem;
+}
+
+//Creates a Translate button for a comment. When the message is not translated, the button reads "Translate" and when it's clicked, it translates the message.
+//If the message is translated, the button reads "Original message" and when it's clicked, the original message is displayed instead.
+//@return button element
+function createTranslateButton(messageElem, originalMessage, languageCode) {
+    var button = document.createElement("button");
+    button.innerText = "Translate";
+    button.classList.add("translate-comment");
+
+    button.addEventListener("click", () => {
+
+        if(button.classList.contains("translated")) {
+
+            messageElem.innerText = originalMessage;
+            button.innerText = "Translate";
+            button.classList.remove("translated");
+
+        } else {
+
+            const params = new URLSearchParams();
+            params.append("message", originalMessage);
+            params.append("languageCode", languageCode);
+            fetch("/translate", {method: "POST", body: params}).then(response => response.text()).then(translation => {
+                messageElem.innerText = translation;
+                button.innerText = "Original message";
+                button.classList.add("translated");
+            });
+        }
+
+    });
+
+    return button;
+}
+
+
+//Creates the delete button for each comment
+//@return button element with an icon
+function createDeleteButton(comment, commentElem) {
+    var button = document.createElement('button');
+    button.innerHTML = "<i class='material-icons black-icon'>delete</i>";
+    button.classList.add("delete-comment");
+
+    button.addEventListener("click", () => {
+        deleteComment(comment);
+        // Remove the task from the DOM.
+        commentElem.remove();
+
+        loadComments();
+     });
+
+     return button;
+
 }
 
 //Creates the smile (like) button for each comment. 
@@ -186,20 +239,20 @@ function convertTime(timestamp) {
 //Tells the server to delete the comment.
 function deleteComment(comment) {
     const params = new URLSearchParams();
-    params.append('id', comment.id);
-    fetch('/delete-data', {method: 'POST', body: params});
+    params.append("id", comment.id);
+    fetch("/delete-data", {method: "POST", body: params});
 }
 
 //Tells the server to like the comment (increment numLikes)
 function likeComment(comment) {
     const params = new URLSearchParams();
-    params.append('id', comment.id);
-    fetch('/like-comment', {method: 'POST', body: params});
+    params.append("id", comment.id);
+    fetch("/like-comment", {method: "POST", body: params});
 }
 
-//Tells the server to unlike the comment (decrenebt numLikes)
+//Tells the server to unlike the comment (decrement numLikes)
 function unlikeComment(comment) {
     const params = new URLSearchParams();
-    params.append('id', comment.id);
-    fetch('/unlike-comment', {method: 'POST', body: params});
+    params.append("id", comment.id);
+    fetch("/unlike-comment", {method: "POST", body: params});
 }
