@@ -60,7 +60,6 @@ function createButtonWithLink(buttonText, url) {
 //Requests comments from DataServlet and adds it to the page.
 function loadComments() {
     fetch("/data?max-comments="+getSelection("max-comments")+"&sort-type="+getSelection("sort-type")).then(response => response.json()).then((comments) => {
-        console.log(comments);
         var commentContainer = document.getElementById('comment-container');
         commentContainer.innerHTML = "";
         //if there are no comments
