@@ -17,6 +17,8 @@ package com.google.sps.servlets;
 import com.google.sps.data.Comment;
 import com.google.sps.data.Comment.CommentBuilder;
 import com.google.sps.utilities.InputCleaner;
+import com.google.sps.utilities.GoogleTranslate;
+import com.google.sps.utilities.FakeTranslate;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.annotation.WebServlet;
@@ -197,16 +199,13 @@ public class DataServlet extends HttpServlet {
     * @return String, language code
     */
     private String getCommentLanguage(String message) {
-        // API
-        // Translate translate = TranslateOptions.getDefaultInstance().getService();
-        // Detection detection = translate.detect(message);
-        // return detection.getLanguage();
+        //DEPLOY
+        // GoogleTranslate gTranslate = new GoogleTranslate();
+        // return gTranslate.detectLanguage(message);
 
-        //TESTING 
-        //return a random language code
-        String[] codes = {"en", "fr", "es"};
-        Random rand = new Random();
-        return codes[rand.nextInt(codes.length)];
+        //DEV
+        FakeTranslate fakeTranslate = new FakeTranslate();
+        return fakeTranslate.detectLanguage(message);
 
     }
 
