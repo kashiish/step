@@ -8,5 +8,4 @@ public interface CommentTranslate {
 
     public String detectLanguage(String message);
 
-
 }
