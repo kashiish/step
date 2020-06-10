@@ -139,7 +139,7 @@ function createTranslateButton(messageElem, originalMessage, languageCode) {
 
         if(button.classList.contains("translated")) {
 
-            messageElem.innerHTML = originalMessage;
+            messageElem.innerText = originalMessage;
             button.innerText = "Translate";
             button.classList.remove("translated");
 
@@ -149,7 +149,7 @@ function createTranslateButton(messageElem, originalMessage, languageCode) {
             params.append("message", originalMessage);
             params.append("languageCode", languageCode);
             fetch("/translate", {method: "POST", body: params}).then(response => response.text()).then(translation => {
-                messageElem.innerHTML = translation;
+                messageElem.innerText = translation;
                 button.innerText = "Original message";
                 button.classList.add("translated");
             });

@@ -22,8 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
-import com.google.sps.utilities.GoogleTranslate;
-import com.google.sps.utilities.FakeTranslate;
 
 @WebServlet("/translate")
 public class TranslationServlet extends HttpServlet {
@@ -33,13 +31,14 @@ public class TranslationServlet extends HttpServlet {
         String originalMessage = request.getParameter("message");
         String languageCode = request.getParameter("languageCode");
 
-        //DEPLOY
-        // GoogleTranslate gTranslate = new GoogleTranslate();
-        // String translatedMessage = gTranslate.translateMessage(originalMessage, languageCode);
+        // API
+        // Translate translate = TranslateOptions.getDefaultInstance().getService();
+        // Translation translation =
+        //     translate.translate(originalMessage, Translate.TranslateOption.targetLanguage(languageCode));
+        // String translatedMessage = translation.getTranslatedText();
 
-        //DEV
-        FakeTranslate fakeTranslate = new FakeTranslate();
-        String translatedMessage = fakeTranslate.translateMessage(originalMessage, languageCode);
+        // TESTING
+        String translatedMessage = "Detta är ett prov.";
 
         response.setContentType("plain/text; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");

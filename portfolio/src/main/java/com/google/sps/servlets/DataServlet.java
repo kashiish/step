@@ -17,8 +17,6 @@ package com.google.sps.servlets;
 import com.google.sps.data.Comment;
 import com.google.sps.data.Comment.CommentBuilder;
 import com.google.sps.utilities.InputCleaner;
-import com.google.sps.utilities.GoogleTranslate;
-import com.google.sps.utilities.FakeTranslate;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.annotation.WebServlet;
@@ -36,11 +34,16 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.CompositeFilter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
+import com.google.cloud.translate.Detection;
 import java.lang.String;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Arrays;
+import java.util.Random; 
 
 
 /** Servlet that returns comments from and adds comments to Datastore. */
@@ -156,13 +159,17 @@ public class DataServlet extends HttpServlet {
     * @return String, language code
     */
     private String getCommentLanguage(String message) {
-        //DEPLOY
-        // GoogleTranslate gTranslate = new GoogleTranslate();
-        // return gTranslate.detectLanguage(message);
+        // API
+        // Translate translate = TranslateOptions.getDefaultInstance().getService();
+        // Detection detection = translate.detect(message);
+        // return detection.getLanguage();
 
-        //DEV
-        FakeTranslate fakeTranslate = new FakeTranslate();
-        return fakeTranslate.detectLanguage(message);
+        //TESTING 
+        //return a random language code
+        String[] codes = {"en", "fr", "es"};
+        Random rand = new Random();
+        return codes[rand.nextInt(codes.length)];
+
     }
 
     /**
