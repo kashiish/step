@@ -302,3 +302,10 @@ iframe {
     background-color: transparent;
     outline:none;
 }
+
+
+#map {
+    height: 700px;
+    width:100%;
+    top: 200px;
+}
