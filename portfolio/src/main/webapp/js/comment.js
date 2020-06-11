@@ -120,6 +120,7 @@ function createCommentElem(comment) {
         
     }
 
+    //if the user is the author of the comment, add a delete button
     if(jsonComment.isAuthor) {
          var deleteButton = createDeleteButton(jsonComment, commentElem);
          commentElem.appendChild(deleteButton);
