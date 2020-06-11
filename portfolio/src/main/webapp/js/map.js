@@ -13,9 +13,35 @@
 // limitations under the License.
 
 var map;
+
 function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 37.464528, lng: -81.020985},
-    zoom: 3
-  });
+    //create map
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 37.464528, lng: -81.020985},
+        zoom: 3
+    });
+
+    loadMarkers();
+
+}
+
+//Loads all stored markers from the server and creates markers to display on the map.
+function loadMarkers() {
+    fetch("/markers").then(response => response.json()).then((markers) => {
+        markers.forEach((marker) => {
+            //convert data to JSON
+            createMarker(JSON.parse(marker));
+        });
+    });
+}
+
+//Creates a marker with an InfoWindow displaying the user's description.
+function createMarker(markerData) {
+    var marker = new google.maps.Marker({position: {lat: markerData.lat, lng: markerData.lng}, map: map});
+
+    var infoWindow = new google.maps.InfoWindow({content: markerData.description});
+
+    marker.addListener("click", () => {
+        infoWindow.open(map, marker);
+    });
 }
