@@ -25,6 +25,7 @@ import com.google.cloud.translate.Translation;
 import com.google.sps.utilities.GoogleTranslate;
 import com.google.sps.utilities.FakeTranslate;
 
+/** Servlet that translates a message using the Translate API. */
 @WebServlet("/translate")
 public class TranslationServlet extends HttpServlet {
 

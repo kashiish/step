@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
+/** Servlet that checks if a user is logged in or not. */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
