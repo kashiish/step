@@ -14,6 +14,7 @@ public final class Comment {
         private long numLikes;
         private boolean isLiked;
         private String languageCode;
+        private boolean isAuthor;
         private long id;
 
         public CommentBuilder() {
@@ -23,6 +24,7 @@ public final class Comment {
             this.numLikes = 0;
             this.isLiked = false;
             this.languageCode = "en";
+            this.isAuthor = false;
         }
 
         public CommentBuilder setName(String name) {
@@ -60,6 +62,11 @@ public final class Comment {
             return this;
         }
 
+        public CommentBuilder setIsAuthor(boolean isAuthor) {
+            this.isAuthor = isAuthor;
+            return this;
+        }
+
         public CommentBuilder setId(long id) {
             this.id = id;
             return this;
@@ -84,6 +91,7 @@ public final class Comment {
     private final long numLikes;
     private final boolean isLiked;
     private final String languageCode;
+    private final boolean isAuthor;
     private final long id;
 
     private Comment(CommentBuilder builder) {
@@ -94,6 +102,7 @@ public final class Comment {
         this.numLikes = builder.numLikes;
         this.isLiked = builder.isLiked;
         this.languageCode = builder.languageCode;
+        this.isAuthor = builder.isAuthor;
         this.id = builder.id;
     }
 
@@ -123,6 +132,10 @@ public final class Comment {
 
     public String getLanguageCode() {
         return this.languageCode;
+    }
+
+    public boolean isAuthor() {
+        return this.isAuthor;
     }
 
     public long getId() {
