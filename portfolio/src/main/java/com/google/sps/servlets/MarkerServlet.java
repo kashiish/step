@@ -30,12 +30,34 @@ import com.google.appengine.api.datastore.Query;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import java.util.Optional;
+import java.lang.String;
+import com.google.gson.Gson;
+import java.util.ArrayList;
 
 /** Handles fetching and saving markers data. */
 @WebServlet("/markers")
 public class MarkerServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+        Query query = new Query("Marker");
+        PreparedQuery results = datastore.prepare(query);
+
+        ArrayList<Marker> markers = new ArrayList<Marker>();
+
+        for (Entity entity : results.asIterable()) {
+            
+            Marker marker = createMarker(entity);
+
+            markers.add(marker);
+            
+        }
+
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;");
+        response.getWriter().println(convertListToJson(markers));
 
     }
 
@@ -74,6 +96,22 @@ public class MarkerServlet extends HttpServlet {
     }
 
     /**
+    * Creates a new Marker object with the given identity. 
+    * @return Marker
+    */
+    private Marker createMarker(Entity entity) {
+
+        long lat = (long) entity.getProperty("lat");
+        long lng = (long) entity.getProperty("lng");
+        String description = (String) entity.getProperty("description");
+
+        Marker marker = new Marker(lat, lng, description);
+
+        return marker;
+
+    }
+
+    /**
     * Creates a new Marker entity with data from a user placed marker.
     *  @return Entity
     */
@@ -89,6 +127,22 @@ public class MarkerServlet extends HttpServlet {
 
         return markerEntity;
 
+    }
+
+    /**
+    * This method converts a list of markers to a JSON string.
+    * @return String, the list of markers as a JSON string
+    */
+    private String convertListToJson(ArrayList<Marker> markers) {
+        ArrayList<String> jsonMarkers = new ArrayList<String>();
+        Gson gson = new Gson();
+        //convert all Marker objects to JSON
+        for(Marker m : markers) {
+            jsonMarkers.add(gson.toJson(m));
+        }
+
+        //convert list to JSON
+        return gson.toJson(jsonMarkers);
     }
 
 
