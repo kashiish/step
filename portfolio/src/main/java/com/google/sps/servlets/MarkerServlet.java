@@ -101,8 +101,8 @@ public class MarkerServlet extends HttpServlet {
     */
     private Marker createMarker(Entity entity) {
 
-        long lat = (long) entity.getProperty("lat");
-        long lng = (long) entity.getProperty("lng");
+        double lat = (double) entity.getProperty("lat");
+        double lng = (double) entity.getProperty("lng");
         String description = (String) entity.getProperty("description");
 
         Marker marker = new Marker(lat, lng, description);
