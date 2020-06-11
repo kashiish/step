@@ -65,28 +65,41 @@ function submitMarker(lat, lng, description) {
 
 }
 
-//Creates a div element with a textbox and submit button for a user placed marker.
+//Creates a div element with a form containing a textbox and submit button for a user placed marker.
 //@return div element
 function createInputForm(lat, lng) {
     var container = document.createElement("div");
+    var label = document.createElement("p");
+    var form = document.createElement("form");
     var textBox = document.createElement("textarea");
     var submitButton = document.createElement("button");
 
+    label.innerHTML = "Description:";
     submitButton.innerHTML = "Submit";
 
-    container.classList.add("marker-form");
+    container.classList.add("marker-form-container");
+    label.classList.add("marker-form-label");
+    form.classList.add("marker-form");
     textBox.classList.add("marker-textbox");
     submitButton.classList.add("marker-submit");
+    submitButton.classList.add("btn-small");
 
-    submitButton.addEventListener("click", () => {
+    //require the textbox field
+    textBox.setAttribute("required", "");
+    textBox.setAttribute("aria-required", "true");
+    submitButton.setAttribute("type", "submit");
+
+    form.addEventListener("submit", () => {
         submitMarker(lat, lng, textBox.value);
         createMarker({lat: lat, lng: lng, description: textBox.value});
         //the user has submitted the marker, so there's no longer an open marker
         openMarker.setMap(null);
-    });
+    })
 
-    container.append(textBox);
-    container.append(submitButton);
+    form.append(textBox);
+    form.append(submitButton);
+    container.append(label);
+    container.append(form);
 
     return container;
 }
