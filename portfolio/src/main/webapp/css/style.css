@@ -9,7 +9,6 @@ html, body {
     margin: 30%;
 }
 
-
 #sidenav-link {
     position:fixed;
     top:0;
@@ -303,9 +302,34 @@ iframe {
     outline:none;
 }
 
-
 #map {
-    height: 700px;
+    height: 600px;
     width:100%;
     top: 200px;
+    position: absolute !important;
+}
+
+#map-description {
+    margin-left: 5%;
+}
+
+.marker-form-label {
+    font-weight: bold;
+    font-family: 'Bellota Text', cursive !important;
+}
+
+.marker-textbox {
+    resize: none;
+    height: 5em !important;
+    border: 1px solid black;
+}
+
+.marker-textbox:focus {
+    outline: none;
+}
+
+.marker-submit {
+    margin-top: 5%;
+    height: 30px !important;
+    line-height: 30px !important;
 }

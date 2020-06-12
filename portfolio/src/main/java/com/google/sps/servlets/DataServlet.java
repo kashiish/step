@@ -250,7 +250,7 @@ public class DataServlet extends HttpServlet {
         try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException e) {
-            System.out.println("encoding failed.");
+            System.out.println("UTF-8 encoding is unsupported by your browser.");
         }
         
         Entity commentEntity = new Entity("Comment");
