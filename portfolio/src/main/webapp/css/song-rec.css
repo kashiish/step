@@ -6,7 +6,7 @@
 #song-rec-info {
     background-color: rgba(0,0,0,0.1);
     position: absolute;
-    top: 20%;
+    top: 15%;
     left: 15%;
     width: 40%;
 }
@@ -45,6 +45,6 @@
 
 iframe {
     position: absolute;
-    top: 15%;
+    top: 10%;
     right: 20%;
 }
