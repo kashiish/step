@@ -41,6 +41,11 @@ function createNewMarkerByUser(lat, lng) {
         openMarker.setMap(null);
     }
 
+    //If the user has an open info window, close that before creating a new marker
+    if(openWindow) {
+        openWindow.close();
+    }
+
     openMarker = new google.maps.Marker({position: {lat: lat, lng: lng}, map: map});
 
     var descriptionInputForm = createInputForm(lat, lng);
