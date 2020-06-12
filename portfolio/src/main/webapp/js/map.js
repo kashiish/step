@@ -122,8 +122,14 @@ function createMarker(markerData) {
     var infoWindow = new google.maps.InfoWindow({content: markerData.description});
 
     marker.addListener("click", () => {
+        //If the user has an open info window, close that before opening a new one
         if(openWindow) {
             openWindow.close();
+        }
+
+        //If a user already started editing another marker, remove it
+        if(openMarker) {
+            openMarker.setMap(null);
         }
 
         infoWindow.open(map, marker);
