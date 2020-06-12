@@ -32,6 +32,8 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.CompositeFilter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Transaction;
+import com.google.appengine.api.datastore.TransactionOptions;
 
 /** Servlet that decrements the number of likes for a comment in Datastore. */
 @WebServlet("/unlike-comment")
@@ -41,11 +43,12 @@ public class UnlikeCommentServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         long id = Long.parseLong(request.getParameter("id"));
 
-        //get comment entity corresponding to id from datastore
-        Key commentEntityKey = KeyFactory.createKey("Comment", id);
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Transaction txn = datastore.beginTransaction();
 
         try {
+            //get comment entity corresponding to id from datastore
+            Key commentEntityKey = KeyFactory.createKey("Comment", id);
             Entity commentEntity = datastore.get(commentEntityKey);
 
             //calculate the number of likes using the previous number of likes
@@ -55,14 +58,21 @@ public class UnlikeCommentServlet extends HttpServlet {
 
             datastore.put(commentEntity);
 
+            txn.commit();
+
             deleteSavedLikedComment(datastore, id);
 
         } catch (EntityNotFoundException e)  {
             response.setContentType("text/html");
             response.getWriter().println("Entity not found.");
+        } finally {
+          if (txn.isActive()) {
+            txn.rollback();
+          }
         }
     
     }
+
 
     /**
     * Filters out UserInfo entity from datastore that has "userId" = the id of the current user and "commentId" = commentId and deletes that entity.
