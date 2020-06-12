@@ -303,7 +303,7 @@ iframe {
 }
 
 #map {
-    height: 1000px;
+    height: 600px;
     width:100%;
     top: 200px;
     position: absolute !important;
