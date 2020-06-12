@@ -17,6 +17,7 @@ package com.google.sps.servlets;
 import com.google.sps.data.Comment;
 import com.google.sps.data.Comment.CommentBuilder;
 import com.google.sps.utilities.InputCleaner;
+import com.google.sps.utilities.CommentTranslate;
 import com.google.sps.utilities.GoogleTranslate;
 import com.google.sps.utilities.FakeTranslate;
 import java.io.IOException;
@@ -57,6 +58,12 @@ public class DataServlet extends HttpServlet {
     private final int MAX_COMMENTS_DEFAULT = 5;
     private final String[] sortTypes =  new String[]{"newest", "oldest", "popular"};
     private InputCleaner cleaner;
+    private static CommentTranslate translator;
+
+    public void init() {
+        //change this new GoogleTranslate when deploying
+        translator = new FakeTranslate();
+    }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -138,7 +145,7 @@ public class DataServlet extends HttpServlet {
         long numLikes = (long) entity.getProperty("numLikes");
         long id = entity.getKey().getId();
         boolean isLiked = isCommentLikedByUser(datastore, id);
-        String languageCode = getCommentLanguage(message);
+        String languageCode = translator.detectLanguage(message);
         boolean isAuthor = isUserAuthorOfComment(datastore, id);
 
         try {
@@ -191,21 +198,6 @@ public class DataServlet extends HttpServlet {
         }
 
         return false;
-
-    }
-
-    /**
-    * Determines the language of the message using the Google Cloud Translate API.
-    * @return String, language code
-    */
-    private String getCommentLanguage(String message) {
-        //DEPLOY
-        // GoogleTranslate gTranslate = new GoogleTranslate();
-        // return gTranslate.detectLanguage(message);
-
-        //DEV
-        FakeTranslate fakeTranslate = new FakeTranslate();
-        return fakeTranslate.detectLanguage(message);
 
     }
 
