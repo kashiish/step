@@ -15,6 +15,7 @@
 var map;
 
 var openMarker;
+var openWindow;
 
 function initMap() {
     //create map
@@ -121,6 +122,12 @@ function createMarker(markerData) {
     var infoWindow = new google.maps.InfoWindow({content: markerData.description});
 
     marker.addListener("click", () => {
+        if(openWindow) {
+            openWindow.close();
+        }
+
         infoWindow.open(map, marker);
+
+        openWindow = infoWindow;
     });
 }
