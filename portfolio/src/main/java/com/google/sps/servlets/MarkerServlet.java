@@ -49,9 +49,7 @@ public class MarkerServlet extends HttpServlet {
 
         for (Entity entity : results.asIterable()) {
             
-            Marker marker = createMarker(entity);
-
-            markers.add(marker);
+            markers.add(createMarker(entity));
             
         }
 
@@ -68,7 +66,7 @@ public class MarkerServlet extends HttpServlet {
         try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException e) {
-            System.out.println("Encoding failed.");
+            System.out.println("UTF-8 encoding is unsupported by your browser.");
         }
         
         //if the latidude is null, set the default to an invalid latitude
@@ -78,13 +76,13 @@ public class MarkerServlet extends HttpServlet {
         String description = Jsoup.clean(getParameter(request, "description").orElse(""), Whitelist.none());
 
         if(lat < -90 || lat > 90) {
-            response.getWriter().println("Invalid value for latitude. Must be inbetween -90 and 90.");
+            response.getWriter().println("Invalid value for latitude. Must be in between -90 and 90.");
             response.sendRedirect("/map.html");
             return;
         }
 
         if(lng < -180  || lng > 180) {
-            response.getWriter().println("Invalid value for longitude. Must be inbetween -180 and 180.");
+            response.getWriter().println("Invalid value for longitude. Must be in between -180 and 180.");
             response.sendRedirect("/map.html");
             return;
         }
