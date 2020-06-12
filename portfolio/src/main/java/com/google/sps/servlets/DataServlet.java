@@ -54,7 +54,6 @@ public class DataServlet extends HttpServlet {
 
     private final int MAX_COMMENTS_DEFAULT = 5;
     private final String[] sortTypes =  new String[]{"newest", "oldest", "popular"};
-    private InputCleaner cleaner;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
