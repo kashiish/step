@@ -61,7 +61,7 @@ public class DataServlet extends HttpServlet {
     private static CommentTranslate translator;
 
     public void init() {
-        //change this new GoogleTranslate when deploying
+        //change this to GoogleTranslate when deploying
         translator = new FakeTranslate();
     }
 
