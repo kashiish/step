@@ -14,8 +14,8 @@
 
 //Requests song recommendations from SongRecServlet and adds it to the page.
 function loadSongRecs() {
-    fetch('/recs?num-loaded=0').then(response => response.json()).then((recs) => {
-    var recContainer = document.getElementById('rec-container');
+    fetch("/recs?num-loaded=0").then(response => response.json()).then((recs) => {
+    var recContainer = document.getElementById("rec-container");
 
     if(recs.length == 0) {
         recContainer.innerText = "None yet!";
@@ -30,16 +30,16 @@ function loadSongRecs() {
     });
 
     //display load more button
-    document.getElementById('load-more-button').style.display = "block";
+    document.getElementById("load-more-button").style.display = "block";
   });
 }
 
 //Fetches more song recommendations from the server and adds them to the page. If there are no more song recommendations, 
 //it adds a message to the page indicating that there are no more.
 function loadMoreSongRecs() {
-    fetch('/recs?num-loaded='+getNumLoadedRecs()).then(response => response.json()).then((recs) => {
+    fetch("/recs?num-loaded="+getNumLoadedRecs()).then(response => response.json()).then((recs) => {
 
-        var recContainer = document.getElementById('rec-container');
+        var recContainer = document.getElementById("rec-container");
 
         //if there are no more recommendations
         if(recs.length === 0){
@@ -122,6 +122,6 @@ function createPlusOneButton(rec) {
 //Tells the serer to like a song recommendation.
 function likeSong(rec) {
     const params = new URLSearchParams();
-    params.append('id', rec.id);
-    fetch('/like-rec', {method: 'POST', body: params});
+    params.append("id", rec.id);
+    fetch("/like-rec", {method: "POST", body: params});
 }

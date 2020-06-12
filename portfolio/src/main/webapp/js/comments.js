@@ -13,8 +13,8 @@
 // limitations under the License.
 
 //Initialize select form (materialize)
-document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('select');
+document.addEventListener("DOMContentLoaded", function() {
+    var elems = document.querySelectorAll("select");
     var instances = M.FormSelect.init(elems);
 });
 
@@ -60,7 +60,7 @@ function createButtonWithLink(buttonText, url) {
 //Requests comments from DataServlet and adds it to the page.
 function loadComments() {
     fetch("/data?max-comments="+getSelection("max-comments")+"&sort-type="+getSelection("sort-type")).then(response => response.json()).then((comments) => {
-        var commentContainer = document.getElementById('comment-container');
+        var commentContainer = document.getElementById("comment-container");
         commentContainer.innerHTML = "";
         //if there are no comments
         if(comments.length == 0 ) {
@@ -168,7 +168,7 @@ function createTranslateButton(messageElem, originalMessage, languageCode) {
 //Creates the delete button for each comment
 //@return button element with an icon
 function createDeleteButton(comment, commentElem) {
-    var button = document.createElement('button');
+    var button = document.createElement("button");
     button.innerHTML = "<i class='material-icons black-icon'>delete</i>";
     button.classList.add("delete-comment");
 
