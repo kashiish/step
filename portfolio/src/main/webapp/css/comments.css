@@ -124,3 +124,32 @@
     padding-left: 5px;
 }
 
+#comment-form {
+    display: none;
+}
+
+#logout-button {
+    float: right;
+    margin-top: 1%;
+}
+
+#login-message {
+    text-align: center;
+    margin-bottom: 5%;
+}
+
+.translate-comment {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    color: #2F4EFC;
+    font-size: 15px;
+    font-weight: 200;
+    margin-top: 1%;
+    cursor: pointer;
+}
+
+.translate-comment:focus {
+    background-color: transparent;
+    outline:none;
+}
