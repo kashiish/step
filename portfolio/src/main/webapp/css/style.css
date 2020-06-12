@@ -16,24 +16,6 @@ html, body {
     z-index: 1;
 }
 
-#about-images {
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-}
-
-#about-images img {
-    width: 20%;
-    margin: 2%;
-}
-
-#bitmoji {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    width: 10%;
-}
-
 .social-icon {
     width: 10%;
 }
@@ -45,46 +27,6 @@ html, body {
 .column {
     width: 50% !important;
     float:left;
-}
-
-.project {
-    display: none;
-    margin: 0.5rem 0 1rem 0;
-}
-
-.active-proj {
-    display: block;
-}
-
-.project img {
-    /* padding: 3%; */
-    width: 38% !important;
-}
-
-
-.project-description {
-    display: inline-block;
-    padding: 3%;
-}
-
-.collection a.collection-item {
-    padding: 3% !important;
-    font-size: 2vh;
-}
-
-.work-icon {
-    margin-left: 2%;
-}
-.proficient .chip {
-    font-size: 20px !important;
-}
-
-.proficient {
-    margin-bottom: 1%;
-}
-
-.chip {
-    margin-right: 10px !important;
 }
 
 .comment-form-input {
