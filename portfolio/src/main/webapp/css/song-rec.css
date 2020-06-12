@@ -1,0 +1,50 @@
+#song-rec-content {
+    background: linear-gradient(295deg, rgba(223,167,5,1) 0%, rgba(250,204,34,1) 35%);
+    height: 600px;
+}
+
+#song-rec-info {
+    background-color: rgba(0,0,0,0.1);
+    position: absolute;
+    top: 20%;
+    left: 15%;
+    width: 40%;
+}
+
+#song-rec-info p {
+    padding: 5%;
+}
+
+#song-rec-form {
+    margin: 5%;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.song-rec {
+    padding-top: 1%;
+    padding-bottom: 1%;
+    border-bottom: 1px solid lightgray;
+}
+
+.song-rec p {
+    display: inline-block;
+    margin: 0;
+    width: 95%;
+}
+
+.plus-one-container {
+    float: right;
+}
+
+#load-more-button {
+    display: none;
+    width: fit-content;
+    margin-top: 2%;
+}
+
+iframe {
+    position: absolute;
+    top: 15%;
+    right: 20%;
+}
