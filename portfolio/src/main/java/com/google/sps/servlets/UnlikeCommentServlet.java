@@ -72,6 +72,9 @@ public class UnlikeCommentServlet extends HttpServlet {
 
             txn.commit();
 
+        } catch (NullPointerException e) {
+            response.setContentType("text/html");
+            response.getWriter().println("Entity not found.");
         } finally {
           if (txn.isActive()) {
             txn.rollback();
