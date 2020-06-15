@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+var userLoggedIn;
+
 //Initialize select form (materialize)
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('select');
@@ -40,6 +42,8 @@ function checkLogin() {
             commentSection.insertBefore(container, document.getElementById("comment-form"));
 
         }
+
+        userLoggedIn = status.loggedIn;
     });
 }
 
@@ -93,7 +97,6 @@ function createCommentElem(comment) {
     var email = document.createElement("p");
     var date = document.createElement("p");
     var message = document.createElement("p");
-    var smile = createSmileButton(jsonComment);
 
     name.innerHTML = jsonComment.name;
     email.innerHTML = jsonComment.email;
@@ -126,7 +129,10 @@ function createCommentElem(comment) {
          commentElem.appendChild(deleteButton);
     }
 
-    commentElem.appendChild(smile);
+    if(userLoggedIn) {
+        var smile = createSmileButton(jsonComment);
+        commentElem.appendChild(smile);
+    }
 
     return commentElem;
 }
