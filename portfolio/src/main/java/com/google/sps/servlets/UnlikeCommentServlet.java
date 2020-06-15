@@ -35,36 +35,43 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.TransactionOptions;
 
-/** Servlet that decrements the number of likes for a comment in Datastore. */
+/** Servlet that deletes a user's like from datastore. */
 @WebServlet("/unlike-comment")
 public class UnlikeCommentServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        long id = Long.parseLong(request.getParameter("id"));
+        long commentId = Long.parseLong(request.getParameter("id"));
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Transaction txn = datastore.beginTransaction();
 
         try {
-            //get comment entity corresponding to id from datastore
-            Key commentEntityKey = KeyFactory.createKey("Comment", id);
-            Entity commentEntity = datastore.get(commentEntityKey);
+            
+            UserService userService = UserServiceFactory.getUserService();
 
-            //calculate the number of likes using the previous number of likes
-            long numLikes = (long) commentEntity.getProperty("numLikes") - 1;
+            //Only logged in users have saved liked comments
+            if (!userService.isUserLoggedIn()) {
+                return;
+            }
 
-            commentEntity.setProperty("numLikes", numLikes);
+            String userId = userService.getCurrentUser().getUserId();
 
-            datastore.put(txn, commentEntity);
+            //create a filter
+            //need to find entity that has userId of the current user and commentId of the comment the user unliked
+            CompositeFilter filter = CompositeFilterOperator.and(FilterOperator.EQUAL.of("userId", userId), FilterOperator.EQUAL.of("commentId", commentId));
+            Query query = new Query("Like").setFilter(filter);
+
+            PreparedQuery pq = datastore.prepare(query);
+        
+            //there should only be one result
+            Entity result = pq.asSingleEntity();
+
+            //delete from datastore
+            datastore.delete(txn, result.getKey());
 
             txn.commit();
 
-            deleteSavedLikedComment(datastore, id);
-
-        } catch (EntityNotFoundException e)  {
-            response.setContentType("text/html");
-            response.getWriter().println("Entity not found.");
         } finally {
           if (txn.isActive()) {
             txn.rollback();
@@ -72,37 +79,5 @@ public class UnlikeCommentServlet extends HttpServlet {
         }
     
     }
-
-
-    /**
-    * Filters out UserInfo entity from datastore that has "userId" = the id of the current user and "commentId" = commentId and deletes that entity.
-    */
-    private void deleteSavedLikedComment(DatastoreService datastore, long commentId) {
-        UserService userService = UserServiceFactory.getUserService();
-
-        //Only logged in users have saved liked comments
-        if (!userService.isUserLoggedIn()) {
-            return;
-        }
-
-        String userId = userService.getCurrentUser().getUserId();
-
-        //create a filter
-        //need to find entity that has userId of the current user and commentId of the comment the user unliked
-        CompositeFilter filter = CompositeFilterOperator.and(FilterOperator.EQUAL.of("userId", userId), FilterOperator.EQUAL.of("commentId", commentId));
-        Query query = new Query("Like").setFilter(filter);
-
-        PreparedQuery pq = datastore.prepare(query);
-       
-        //there should only be one result
-        Entity result = pq.asSingleEntity();
-
-        //delete from datastore
-        datastore.delete(result.getKey());
-
-
-    }
-
-
 
 }
