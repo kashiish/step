@@ -22,9 +22,23 @@ import java.util.ArrayList;
 
 public final class FindMeetingQuery {
     public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+        ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
+
+        //if there are no events or no attendees, the entire day is available
+        if(events.size() == 0 || request.getAttendees().size() == 0) {
+            availableTimes.add(TimeRange.WHOLE_DAY);
+            return availableTimes;
+        }
+
         ArrayList<Event> sortedEventsList = sortEventsByTime(events);
+
+
     }
 
+    /**
+    * Creates a sorted list of events based on the event's start time.
+    * @return ArrayList<Event>
+    */
     private ArrayList<Event> sortEventsByStartTime(Collection<Event> events) {
         ArrayList<Event> eventsList = new ArrayList<Event>(events);
 
