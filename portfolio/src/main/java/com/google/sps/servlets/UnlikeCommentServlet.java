@@ -56,7 +56,7 @@ public class UnlikeCommentServlet extends HttpServlet {
 
             commentEntity.setProperty("numLikes", numLikes);
 
-            datastore.put(commentEntity);
+            datastore.put(txn, commentEntity);
 
             txn.commit();
 

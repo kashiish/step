@@ -52,10 +52,11 @@ public class LikeCommentServlet extends HttpServlet {
 
             commentEntity.setProperty("numLikes", numLikes);
 
-            datastore.put(commentEntity);
+            datastore.put(txn, commentEntity);
 
             txn.commit();
-             saveLikedComment(datastore, id);
+
+            saveLikedComment(datastore, id);
         } catch (EntityNotFoundException e)  {
             response.setContentType("text/html");
             response.getWriter().println("Entity not found.");
