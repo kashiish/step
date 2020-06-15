@@ -268,7 +268,6 @@ public class DataServlet extends HttpServlet {
         commentEntity.setProperty("message", message);
         commentEntity.setProperty("email", email);
         commentEntity.setProperty("timestamp", timestamp);
-        // commentEntity.setProperty("numLikes", 0);
         commentEntity.setProperty("userId", userId);
 
         return commentEntity;
