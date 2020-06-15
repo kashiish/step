@@ -44,7 +44,7 @@ public class LikeCommentServlet extends HttpServlet {
 
         try {
 
-            Userservice userService = UserServiceFactory.getUserService();
+            UserService userService = UserServiceFactory.getUserService();
 
             // Only save comments for logged-in users 
             if (!userService.isUserLoggedIn()) {
