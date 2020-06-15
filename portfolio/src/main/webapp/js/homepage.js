@@ -14,7 +14,7 @@
 
 //prevent the page from refreshing when contact form is submitted
 var form = document.getElementById("contact-form")
-form.addEventListener('submit', (e) => e.preventDefault());
+form.addEventListener("submit", (e) => e.preventDefault());
 
 //Switches the project description and image to the project that was clicked on. 
 function switchProject(elem) {
@@ -40,11 +40,11 @@ function submitContactForm() {
     clearSubmissionMessage();
 
     const params = new URLSearchParams();
-    params.append('name', contactForm.name.value);
-    params.append('email', contactForm.email.value);
-    params.append('message', contactForm.message.value);
+    params.append("name", contactForm.name.value);
+    params.append("email", contactForm.email.value);
+    params.append("message", contactForm.message.value);
 
-    fetch('/send-email', {method: 'POST', body: params}).then(response => {
+    fetch("/send-email", {method: "POST", body: params}).then(response => {
         var contactFormContainer = document.getElementById("contact-form-container");
         var resultMessage = document.createElement("p");
         //if email was sent
