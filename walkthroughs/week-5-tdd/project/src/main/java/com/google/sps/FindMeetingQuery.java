@@ -19,21 +19,25 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 
 
 public final class FindMeetingQuery {
     public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+        ArrayList<Event> validEvents = ignoreEventsWithoutRequestAttendees(events, request);
+
         //if the duration of the meeting is over a day --> no available times
         if(request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
             return new ArrayList<TimeRange>();
         }
 
         //if there are no events or no attendees, the entire day is available
-        if(events.size() == 0 || request.getAttendees().size() == 0) {
-            return Arrays.asList(TimeRange.WHOLE_DAY);;
+        if(validEvents.size() == 0 || request.getAttendees().size() == 0) {
+            return Arrays.asList(TimeRange.WHOLE_DAY);
         }
 
-        return getAvailableTimes(request);
+        return getAvailableTimes(validEvents, request);
 
     }
 
@@ -41,7 +45,7 @@ public final class FindMeetingQuery {
     * Gets all the available time ranges for the meeting request. 
     * @return ArrayList<TimeRange>
     */
-    private ArrayList<TimeRange> getAvailableTimes(MeetingRequest request) {
+    private ArrayList<TimeRange> getAvailableTimes(Collection<Event> events, MeetingRequest request) {
         ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
 
         ArrayList<Event> sortedEventsList = sortEventsByStartTime(events);
@@ -51,19 +55,28 @@ public final class FindMeetingQuery {
         long duration = request.getDuration();
         int i = 0;
 
+        //while there is enough time for the requested meeting from the startTime of the timerange till the end of the day
         while(startTime + duration <= TimeRange.END_OF_DAY) {
-            int endTime = startTime;
 
+            int endTime = startTime;
             TimeRange currentEventTime = sortedEventsList.get(i).getWhen();
 
-            //currentEventTime.start() > startTime + duration checks if there is enough time for the meeting
-            while(currentEventTime.start() > startTime + duration && i < sortedEventsList.size()) {
+            while(i < sortedEventsList.size()) {
+                
+                currentEventTime = sortedEventsList.get(i).getWhen();
+
+                //if there is enough time to have the requested meeting from startTime to the beginning of the event we're currently looking at, we can create a new timerange
+                //from startTime - the end of the current event time
+                if(currentEventTime.start() >= startTime + duration) {
+                    endTime = currentEventTime.start();
+                    i++;
+                    break;
+                //if there is an overlap between the current event and the requested event, make the new startTime the end of the current event
+                } else if(currentEventTime.start() >= startTime && currentEventTime.start() < startTime + duration) {
+                    startTime = currentEventTime.end();
+                } 
+
                 i++;
-                //set the end time of the time range to the start of this meeting
-                endTime = currentEventTime.start();
-                if(i < sortedEventsList.size()) {
-                    currentEventTime = sortedEventsList.get(i).getWhen();
-                }
             }
 
             //if the endTime of the time range (which was set to startTime) is greater than or equal to the duration of the meeting, it can be added as a new time range
@@ -71,14 +84,16 @@ public final class FindMeetingQuery {
                 availableTimes.add(TimeRange.fromStartEnd(startTime, endTime, false));
             }
 
-            //if we haven't looked at all events, set the next time range's start time to the end of the current event 
-            if(i < sortedEventsList.size()) {
-                startTime = currentEventTime.end();
-            }
+            //takes care of overlapping meetings
+            //for example, currentEvent = meeting 2
+            //meeting 1: 8:30am - 10am
+            //meeting 2: 9am - 9:30am
+            //we want the startTime of the next timerange to still be 10am, not 9:30am because meeting 1 is still going on
+            startTime = currentEventTime.end() > startTime ? currentEventTime.end() : startTime;
 
             //if we've looked at all meetings and there is enough time (until the end of the day) for the new meeting, create a new time range until the end of the day
             if(i == sortedEventsList.size() && TimeRange.END_OF_DAY - startTime >= duration) {
-                availableTimes.add(TimeRange.fromStartEnd(currentEventTime.end(), TimeRange.END_OF_DAY, true));
+                availableTimes.add(TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, true));
                 break;
             }
 
@@ -86,6 +101,41 @@ public final class FindMeetingQuery {
 
         return availableTimes;
 
+    }
+
+    /**
+    * Creates a new ArrayList containing events with attendee overlap with the requested meeting. If no required attendees in the requested meeting
+    * are required at a specific event, that event will not be considered when creating TimeRange for the requested meeting.
+    * @return ArrayList<Event>
+    */
+    private ArrayList<Event> ignoreEventsWithoutRequestAttendees(Collection<Event> events, MeetingRequest request) {
+        ArrayList<Event> validEvents = new ArrayList<Event>();
+
+        for(Event event : events) {
+            if(anyAttendeeBusy(event, request)) {
+                validEvents.add(event);
+            }
+        }
+
+        return validEvents;
+
+    }
+
+    /**
+    * Checks if there are any attendees required at the requested meeting that are also required at the specified Event.
+    * @return boolean, true if there is an attendee overlap, false otherwise
+    */
+    private boolean anyAttendeeBusy(Event event, MeetingRequest request) {
+        Set<String> requestAttendees = new HashSet(request.getAttendees());
+        Set<String> eventAttendees = event.getAttendees();
+
+        for(String attendee : requestAttendees) {
+            if(eventAttendees.contains(attendee)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
