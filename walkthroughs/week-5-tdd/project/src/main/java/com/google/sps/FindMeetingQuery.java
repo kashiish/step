@@ -18,14 +18,20 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public final class FindMeetingQuery {
     public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-        ArrayList<Event> validEvents = ignoreEventsWithoutRequestAttendees(events, request);
+
+        List<String> allAttendees = Stream.concat(request.getAttendees().stream(), request.getOptionalAttendees().stream())
+                                        .collect(Collectors.toList());
+        ArrayList<Event> validEventsAllAttendees = ignoreEventsWithoutRequestAttendees(events, allAttendees);
 
         //if the duration of the meeting is over a day --> no available times
         if(request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
@@ -33,13 +39,35 @@ public final class FindMeetingQuery {
         }
 
         //if there are no events or no attendees, the entire day is available
-        if(validEvents.size() == 0 || request.getAttendees().size() == 0) {
+        if(validEventsAllAttendees.size() == 0 || allAttendees.size() == 0) {
             return Arrays.asList(TimeRange.WHOLE_DAY);
         }
 
-        return getAvailableTimes(validEvents, request);
+        ArrayList<TimeRange> availableTimesAllAttendees = getAvailableTimes(validEventsAllAttendees, request);
+
+        //if there was one or more times available with optional attendees, return those times
+        if(availableTimesAllAttendees.size() > 0) {
+            return availableTimesAllAttendees;
+        }
+
+        //if there is no time with both mandatory and optional, just look at mandatory attendees
+        ArrayList<Event> validEventsMandatoryAttendees = ignoreEventsWithoutRequestAttendees(events, request.getAttendees());
+        
+        //if we got to this statement, that means there were only optional attendees and no mandatory attendees,
+        //so there is no time available
+        if(request.getAttendees().size() == 0) {
+            return new ArrayList<TimeRange>();
+        }
+
+        //there are mandatory employees with no events --> the whole day is available
+        if(validEventsMandatoryAttendees.size() == 0) {
+            return Arrays.asList(TimeRange.WHOLE_DAY);
+        }
+
+        return getAvailableTimes(validEventsMandatoryAttendees, request);
 
     }
+
 
     /**
     * Gets all the available time ranges for the meeting request. 
@@ -108,11 +136,11 @@ public final class FindMeetingQuery {
     * are required at a specific event, that event will not be considered when creating TimeRange for the requested meeting.
     * @return ArrayList<Event>
     */
-    private ArrayList<Event> ignoreEventsWithoutRequestAttendees(Collection<Event> events, MeetingRequest request) {
+    private ArrayList<Event> ignoreEventsWithoutRequestAttendees(Collection<Event> events, Collection<String> requestAttendees) {
         ArrayList<Event> validEvents = new ArrayList<Event>();
 
         for(Event event : events) {
-            if(anyAttendeeBusy(event, request)) {
+            if(anyAttendeeBusy(event, requestAttendees)) {
                 validEvents.add(event);
             }
         }
@@ -125,8 +153,8 @@ public final class FindMeetingQuery {
     * Checks if there are any attendees required at the requested meeting that are also required at the specified Event.
     * @return boolean, true if there is an attendee overlap, false otherwise
     */
-    private boolean anyAttendeeBusy(Event event, MeetingRequest request) {
-        Set<String> requestAttendees = new HashSet(request.getAttendees());
+    private boolean anyAttendeeBusy(Event event, Collection<String> attendees) {
+        Set<String> requestAttendees = new HashSet(attendees);
         Set<String> eventAttendees = event.getAttendees();
 
         for(String attendee : requestAttendees) {
