@@ -92,19 +92,18 @@ public final class FindMeetingQuery {
             while(i < sortedEventsList.size()) {
                 
                 currentEventTime = sortedEventsList.get(i).getWhen();
-
+                
+                i++;
                 //if there is enough time to have the requested meeting from startTime to the beginning of the event we're currently looking at, we can create a new timerange
                 //from startTime - the end of the current event time
                 if(currentEventTime.start() >= startTime + duration) {
                     endTime = currentEventTime.start();
-                    i++;
                     break;
                 //if there is an overlap between the current event and the requested event, make the new startTime the end of the current event
                 } else if(currentEventTime.start() >= startTime && currentEventTime.start() < startTime + duration) {
                     startTime = currentEventTime.end();
                 } 
 
-                i++;
             }
 
             //if the endTime of the time range (which was set to startTime) is greater than or equal to the duration of the meeting, it can be added as a new time range
