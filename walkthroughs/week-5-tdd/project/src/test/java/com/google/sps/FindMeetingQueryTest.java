@@ -276,7 +276,7 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void ignoreOptionalAttendeeSchedule() {
-    // Have on optional attendee, Person C, who has an all-day event.
+    // Have one optional attendee, Person C, who has an all-day event.
     // Have each mandatory person have different events. We should see three options because each person has
     // split the restricted times and the optional attendee's schedule should not be considered. 
     //           |--------------C--------------|

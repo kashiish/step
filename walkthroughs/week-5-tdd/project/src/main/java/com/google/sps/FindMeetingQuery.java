@@ -50,14 +50,14 @@ public final class FindMeetingQuery {
             return availableTimesAllAttendees;
         }
 
-        //if there is no time with both mandatory and optional, just look at mandatory attendees
-        ArrayList<Event> validEventsMandatoryAttendees = ignoreEventsWithoutRequestAttendees(events, request.getAttendees());
-        
         //if we got to this statement, that means there were only optional attendees and no mandatory attendees,
         //so there is no time available
         if(request.getAttendees().size() == 0) {
             return new ArrayList<TimeRange>();
         }
+
+        //if there is no time with both mandatory and optional, just look at mandatory attendees
+        ArrayList<Event> validEventsMandatoryAttendees = ignoreEventsWithoutRequestAttendees(events, request.getAttendees());
 
         //there are mandatory employees with no events --> the whole day is available
         if(validEventsMandatoryAttendees.size() == 0) {
@@ -116,7 +116,7 @@ public final class FindMeetingQuery {
             //meeting 1: 8:30am - 10am
             //meeting 2: 9am - 9:30am
             //we want the startTime of the next timerange to still be 10am, not 9:30am because meeting 1 is still going on
-            startTime = currentEventTime.end() > startTime ? currentEventTime.end() : startTime;
+            startTime = Math.max(currentEventTime.end(), startTime);
 
             //if we've looked at all meetings and there is enough time (until the end of the day) for the new meeting, create a new time range until the end of the day
             if(i == sortedEventsList.size() && TimeRange.END_OF_DAY - startTime >= duration) {
@@ -152,8 +152,7 @@ public final class FindMeetingQuery {
     * Checks if there are any attendees required at the requested meeting that are also required at the specified Event.
     * @return boolean, true if there is an attendee overlap, false otherwise
     */
-    private boolean anyAttendeeBusy(Event event, Collection<String> attendees) {
-        Set<String> requestAttendees = new HashSet(attendees);
+    private boolean anyAttendeeBusy(Event event, Collection<String> requestAttendees) {
         Set<String> eventAttendees = event.getAttendees();
 
         for(String attendee : requestAttendees) {
