@@ -31,7 +31,7 @@ public final class FindMeetingQuery {
 
         List<String> allAttendees = Stream.concat(request.getAttendees().stream(), request.getOptionalAttendees().stream())
                                         .collect(Collectors.toList());
-        ArrayList<Event> validEventsAllAttendees = ignoreEventsWithoutRequestAttendees(events, allAttendees);
+        List<Event> validEventsAllAttendees = ignoreEventsWithoutRequestAttendees(events, allAttendees);
 
         //if the duration of the meeting is over a day --> no available times
         if(request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
@@ -57,7 +57,7 @@ public final class FindMeetingQuery {
         }
 
         //if there is no time with both mandatory and optional, just look at mandatory attendees
-        ArrayList<Event> validEventsMandatoryAttendees = ignoreEventsWithoutRequestAttendees(events, request.getAttendees());
+        List<Event> validEventsMandatoryAttendees = ignoreEventsWithoutRequestAttendees(events, request.getAttendees());
 
         //there are mandatory employees with no events --> the whole day is available
         if(validEventsMandatoryAttendees.size() == 0) {
@@ -133,19 +133,13 @@ public final class FindMeetingQuery {
     /**
     * Creates a new ArrayList containing events with attendee overlap with the requested meeting. If no required attendees in the requested meeting
     * are required at a specific event, that event will not be considered when creating TimeRange for the requested meeting.
-    * @return ArrayList<Event>
+    * @return List<Event>
     */
-    private ArrayList<Event> ignoreEventsWithoutRequestAttendees(Collection<Event> events, Collection<String> requestAttendees) {
-        ArrayList<Event> validEvents = new ArrayList<Event>();
-
-        for(Event event : events) {
-            if(anyAttendeeBusy(event, requestAttendees)) {
-                validEvents.add(event);
-            }
-        }
-
-        return validEvents;
-
+    private List<Event> ignoreEventsWithoutRequestAttendees(Collection<Event> events, Collection<String> requestAttendees) {
+        return events
+        .stream()
+        .filter(e -> anyAttendeeBusy(e, requestAttendees))
+        .collect(Collectors.toList());
     }
 
     /**
@@ -155,13 +149,10 @@ public final class FindMeetingQuery {
     private boolean anyAttendeeBusy(Event event, Collection<String> requestAttendees) {
         Set<String> eventAttendees = event.getAttendees();
 
-        for(String attendee : requestAttendees) {
-            if(eventAttendees.contains(attendee)) {
-                return true;
-            }
-        }
-
-        return false;
+        return requestAttendees
+        .stream()
+        .map(a -> eventAttendees.contains(a))
+        .reduce(false, (a, b) -> a || b);
     }
 
     /**
