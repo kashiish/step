@@ -27,60 +27,47 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.Transaction;
+import com.google.appengine.api.datastore.TransactionOptions;
 
 
-/** Servlet that increases the number of likes for a comment in Datastore. */
+/** Servlet that adds a user's like to Datastore. */
 @WebServlet("/like-comment")
 public class LikeCommentServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        long id = Long.parseLong(request.getParameter("id"));
+        long commentId = Long.parseLong(request.getParameter("id"));
 
-        //get comment entity corresponding to id from datastore
-        Key commentEntityKey = KeyFactory.createKey("Comment", id);
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Transaction txn = datastore.beginTransaction();
 
         try {
-            Entity commentEntity = datastore.get(commentEntityKey);
 
-            //calculate the number of likes using the previous number of likes
-            long numLikes = (long) commentEntity.getProperty("numLikes") + 1;
+            UserService userService = UserServiceFactory.getUserService();
 
-            commentEntity.setProperty("numLikes", numLikes);
+            // Only save comments for logged-in users 
+            if (!userService.isUserLoggedIn()) {
+                return;
+            }
 
-            datastore.put(commentEntity);
+            String userId = userService.getCurrentUser().getUserId();
 
-            saveLikedComment(datastore, id);
+            Entity entity = new Entity("Like", userId);
+            
+            entity.setProperty("commentId", commentId);
+            entity.setProperty("userId", userId);
 
-        } catch (EntityNotFoundException e)  {
-            response.setContentType("text/html");
-            response.getWriter().println("Entity not found.");
+            datastore.put(txn, entity);
+
+            txn.commit();
+
+        } finally {
+          if (txn.isActive()) {
+            txn.rollback();
+          }
         }
     
-    }
-
-    /*
-    * Creates a new UserInfo entity that stores the current user's id and the id of the comment that was liked.
-    */
-    private void saveLikedComment(DatastoreService datastore, long commentId) {
-        
-        UserService userService = UserServiceFactory.getUserService();
-
-        // Only save comments for logged-in users 
-        if (!userService.isUserLoggedIn()) {
-            return;
-        }
-
-        String userId = userService.getCurrentUser().getUserId();
-
-        Entity entity = new Entity("Like");
-
-        entity.setProperty("commentId", commentId);
-        entity.setProperty("userId", userId);
-
-        datastore.put(entity);
-
     }
 
 }

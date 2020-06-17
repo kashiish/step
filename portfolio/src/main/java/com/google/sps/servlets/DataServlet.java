@@ -137,12 +137,12 @@ public class DataServlet extends HttpServlet {
         
         Comment comment;
 
+        long id = entity.getKey().getId();
         String name = (String) entity.getProperty("name");
         String message = (String) entity.getProperty("message");
         String email = (String) entity.getProperty("email");
         long timestamp = (long) entity.getProperty("timestamp");
-        long numLikes = (long) entity.getProperty("numLikes");
-        long id = entity.getKey().getId();
+        long numLikes = getNumLikesForComment(datastore, id);
         boolean isLiked = isCommentLikedByUser(datastore, id);
         String languageCode = translator.detectLanguage(message);
         boolean isAuthor = isUserAuthorOfComment(datastore, id);
@@ -164,6 +164,19 @@ public class DataServlet extends HttpServlet {
 
         return comment;
 
+    }
+
+    /**
+    * Gets the count of Like entities with commentId that is equal to the commentId parameter.
+    * @return long
+    */
+    private long getNumLikesForComment(DatastoreService datastore, long commentId) {
+
+        Query query = new Query("Like").setFilter(FilterOperator.EQUAL.of("commentId", commentId));
+
+        PreparedQuery pq = datastore.prepare(query);
+
+        return pq.countEntities();
     }
 
     /**
@@ -254,7 +267,6 @@ public class DataServlet extends HttpServlet {
         commentEntity.setProperty("message", message);
         commentEntity.setProperty("email", email);
         commentEntity.setProperty("timestamp", timestamp);
-        commentEntity.setProperty("numLikes", 0);
         commentEntity.setProperty("userId", userId);
 
         return commentEntity;

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+var userLoggedIn;
+
 //Initialize select form (materialize)
 document.addEventListener("DOMContentLoaded", function() {
     var elems = document.querySelectorAll("select");
@@ -30,7 +32,7 @@ function checkLogin() {
             var container = document.createElement("div");
             var message = document.createElement("p");
 
-            message.innerText = "Please login to write comments.";
+            message.innerText = "Please login to write and like comments.";
 
             container.appendChild(message);
             container.appendChild(createButtonWithLink("Login", status.url));
@@ -40,6 +42,8 @@ function checkLogin() {
             commentSection.insertBefore(container, document.getElementById("comment-form"));
 
         }
+
+        userLoggedIn = status.loggedIn;
     });
 }
 
@@ -221,6 +225,11 @@ function createSmileButton(comment) {
             smileIcon.classList.add("press");
         }
     });
+
+
+    if(!userLoggedIn) {
+        button.disabled = true;
+    }
 
     container.appendChild(button);
     container.appendChild(numLikesLabel);
