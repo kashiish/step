@@ -15,6 +15,7 @@
 var map;
 
 var openMarker;
+var openWindow;
 
 function initMap() {
     //create map
@@ -38,6 +39,11 @@ function createNewMarkerByUser(lat, lng) {
     //If a user already started editing another marker, remove it
     if(openMarker) {
         openMarker.setMap(null);
+    }
+
+    //If the user has an open info window, close that before creating a new marker
+    if(openWindow) {
+        openWindow.close();
     }
 
     openMarker = new google.maps.Marker({position: {lat: lat, lng: lng}, map: map});
@@ -121,6 +127,18 @@ function createMarker(markerData) {
     var infoWindow = new google.maps.InfoWindow({content: markerData.description});
 
     marker.addListener("click", () => {
+        //If the user has an open info window, close that before opening a new one
+        if(openWindow) {
+            openWindow.close();
+        }
+
+        //If a user already started editing another marker, remove it
+        if(openMarker) {
+            openMarker.setMap(null);
+        }
+
         infoWindow.open(map, marker);
+
+        openWindow = infoWindow;
     });
 }

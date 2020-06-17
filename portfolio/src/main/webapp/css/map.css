@@ -1,8 +1,9 @@
 #map {
-    height: 80%;
+    height: 70%;
     width:100%;
     top: 200px;
     position: absolute !important;
+    margin-top: 2%;
 }
 
 #map-description {
