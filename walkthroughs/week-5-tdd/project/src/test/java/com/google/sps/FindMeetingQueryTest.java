@@ -430,8 +430,8 @@ public final class FindMeetingQueryTest {
     // Have one mandatory attendee, Person A and three optional attendees, Person B, Person C, and Person D
     // each have a few events. There is no time for everyone to meet, but there are times where Person A,
     // Person B, and Person C can meet. 
-    //                  
-    // Events  : |--A--|---D---|---B---|---C---|---D---|
+    //                                 |-------D-------| 
+    // Events  : |--A--|---D---|---BC--|---C---|
     // Day     : |-------------------------------------|
     // Options :       |---1---|               |---2---|
 
@@ -441,10 +441,10 @@ public final class FindMeetingQueryTest {
         new Event("Event 2", TimeRange.fromStartEnd(TIME_0800AM, TIME_0900AM, false),
             Arrays.asList(PERSON_D)),
         new Event("Event 3", TimeRange.fromStartEnd(TIME_0900AM, TIME_0930AM, false),
-            Arrays.asList(PERSON_B)),
+            Arrays.asList(PERSON_B, PERSON_C)),
         new Event("Event 3", TimeRange.fromStartEnd(TIME_0930AM, TIME_1000AM, false),
             Arrays.asList(PERSON_C)),
-        new Event("Event 3", TimeRange.fromStartEnd(TIME_1000AM, TimeRange.END_OF_DAY, true),
+        new Event("Event 3", TimeRange.fromStartEnd(TIME_0930AM, TimeRange.END_OF_DAY, true),
             Arrays.asList(PERSON_D)));
 
         MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), DURATION_30_MINUTES);
