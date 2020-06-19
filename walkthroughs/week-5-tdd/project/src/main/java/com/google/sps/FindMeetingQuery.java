@@ -56,6 +56,12 @@ public final class FindMeetingQuery {
             return new ArrayList<TimeRange>();
         }
 
+        return getTimesWithMaxOptionalAttendees(events, request);
+
+    }
+
+    private List<TimeRange> getTimesWithMaxOptionalAttendees(Collection<Event> events, MeetingRequest request) {
+
         //if there is no time with both mandatory and optional, just look at mandatory attendees
         List<Event> validEventsMandatoryAttendees = ignoreEventsWithoutRequestAttendees(events, request.getAttendees());
 
@@ -63,11 +69,153 @@ public final class FindMeetingQuery {
         if(validEventsMandatoryAttendees.size() == 0) {
             return Arrays.asList(TimeRange.WHOLE_DAY);
         }
+        
+        ArrayList<TimeRange> mandatoryAttendeeTimes = getAvailableTimes(validEventsMandatoryAttendees, request);
+        ArrayList<TimeRange> optionalAttendeeTimes = getAvailableTimesForOptionalAttendees(events, request);
 
-        return getAvailableTimes(validEventsMandatoryAttendees, request);
+        ArrayList<TimeRange> overlappingTimes = getTimesThatOverlapWithMandatoryAttendees(mandatoryAttendeeTimes, optionalAttendeeTimes, request.getDuration());
 
+        List<Availability> availabilityForTimes = getAvailabilityForTimes(overlappingTimes, request.getDuration());
+        
+        //if there are no times where optional attendees' availability coincides with mandatory attendees' availability, just return mandatory attendee times
+        if(availabilityForTimes.size() == 0) {
+            return mandatoryAttendeeTimes;
+        }
+        
+        Collections.sort(availabilityForTimes, new Comparator<Availability>() {
+            @Override
+            public int compare(Availability a, Availability b) {
+                return b.getNumAvailablePeople() - a.getNumAvailablePeople();
+            }
+        });
+
+        int max = 0;
+
+        ArrayList<TimeRange> results = new ArrayList<TimeRange>();
+
+        //get the time ranges that have the most number of available optional attendees
+        for(Availability a : availabilityForTimes) {
+            if(a.getNumAvailablePeople() < max) {
+                break;
+            }
+
+            max = a.getNumAvailablePeople();
+
+            if(results.contains(a.getTime())) {
+                continue;
+            }
+
+            results.add(a.getTime());
+        }
+
+        return results;
+        
     }
 
+    /**
+    * The purpose of this method is to find times where more than one optional attendee is available. The parameter, times,
+    * is a list of all times where one optional attendee is free.
+    * @return List<Availability> 
+    */
+    private List<Availability> getAvailabilityForTimes(ArrayList<TimeRange> times, long duration) {
+
+        Collections.sort(times, TimeRange.ORDER_BY_START);
+
+        //create Availability objects with times
+        List<Availability> sortedAvailability = times.stream().map(a -> new Availability(a)).collect(Collectors.toList());
+
+        //this for loop finds new ranges where the times in the times list overlap with each other
+        //for example, 
+        //if times = 8:30-9, 8:30-9:30, 8:45-9, 9-9:30
+        //we will find 8:30-9, 8:45-9, 9-9:30 as overlapping times where more than one optional attendee is free
+        for(TimeRange time : times) {
+            
+            //stores new overlapped times where multiple optional attendees are free
+            ArrayList<Availability> overlappedAvailability = new ArrayList<Availability>();
+
+            for(Availability availability : sortedAvailability) {
+
+                //if the times don't overlap, skip this availability
+                if(!time.overlaps(availability.getTime())) {
+                    continue;
+                }
+
+                TimeRange overlapTime = TimeRange.getOverlappedTime(time, availability.getTime());
+                if(overlapTime.duration() >= duration) {
+                    
+                    //if the overlapped time is the same as the availability we're looking at, just increment the number of people that can attend at the availability's time
+                    if(overlapTime.equals(availability.getTime())) {
+                        availability.incrementNumAvailablePeople();
+                    } else {
+                        //create a new availability with the overlapped time
+                        Availability overlapTimeAvailability = new Availability(overlapTime);
+                        overlapTimeAvailability.incrementNumAvailablePeople();
+                        overlappedAvailability.add(overlapTimeAvailability);
+                    }
+
+
+                }
+            }
+
+            //the next time in the times list will check if it overlaps with any of the other times in the list or any of the new overlapped times we created above
+            sortedAvailability.addAll(overlappedAvailability);
+            overlappedAvailability = new ArrayList<Availability>();
+
+        }
+
+
+        return sortedAvailability;
+        
+    }
+ 
+    /**
+    * Gets all the times where optional attendee times overlap with mandatory attendee times and are long enough for the requested meeting.
+    * @return ArrayList<TimeRange>
+    */
+    private ArrayList<TimeRange> getTimesThatOverlapWithMandatoryAttendees(ArrayList<TimeRange> mandatoryAttendeeTimes, ArrayList<TimeRange> optionalAttendeeTimes, long duration) {
+        ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
+
+        for(TimeRange optional : optionalAttendeeTimes) {
+            
+            for(TimeRange mandatory : mandatoryAttendeeTimes) {
+
+                if(optional.overlaps(mandatory)) {
+
+                    TimeRange overlapTime = TimeRange.getOverlappedTime(optional, mandatory);
+                    
+                    if(overlapTime.duration() >= duration) {
+                        availableTimes.add(overlapTime);
+                    }
+
+                }
+            }
+        }
+
+        return availableTimes;
+
+        
+    }
+
+
+    /**
+    * Gets all times available for each optional attendee in one list. 
+    * @return ArrayList<TimeRange>
+    */
+    private ArrayList<TimeRange> getAvailableTimesForOptionalAttendees(Collection<Event> events, MeetingRequest request) {
+        //every time in this list is a time that one optional attendee is available
+        ArrayList<TimeRange> timesForOptionalAttendees = new ArrayList<TimeRange>();
+
+        for(String attendee : request.getOptionalAttendees()) {
+            List<Event> relevantEvents = ignoreEventsWithoutRequestAttendees(events, Arrays.asList(attendee));
+            ArrayList<TimeRange> times = getAvailableTimes(relevantEvents, request);
+
+            for(TimeRange time : times) {
+                timesForOptionalAttendees.add(time);
+            }
+        }
+
+        return timesForOptionalAttendees;
+    }
 
     /**
     * Gets all the available time ranges for the meeting request. 
