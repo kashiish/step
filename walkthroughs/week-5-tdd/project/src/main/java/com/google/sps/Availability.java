@@ -39,11 +39,4 @@ public final class Availability {
         return this.numAvailablePeople;
     }
 
-    @Override
-    public boolean equals(Object other) {
-        Availability otherAvailability = (Availability) other;
-        return other instanceof Availability && this.time == otherAvailability.getTime();
-    }
-
-
 }
