@@ -20,23 +20,23 @@ import java.util.ArrayList;
 public final class Availability {
 
     private TimeRange time;
-    private ArrayList<String> availablePeople;
+    private int numAvailablePeople;
 
     public Availability(TimeRange time) {
         time = this.time;
-        availablePeople = new ArrayList<String>();
+        numAvailablePeople = 0;
     }
 
     public TimeRange getTime() {
         return this.time;
     }
 
-    public void addAvailablePerson(String person) {
-        this.availablePeople.add(person);
+    public void incrementNumAvailablePeople() {
+        this.numAvailablePeople++;
     }
 
     public int getNumAvailablePeople() {
-        return this.availablePeople.size();
+        return this.numAvailablePeople.size();
     }
 
 }
