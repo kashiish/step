@@ -23,7 +23,7 @@ public final class Availability {
     private int numAvailablePeople;
 
     public Availability(TimeRange time) {
-        time = this.time;
+        this.time = time;
         numAvailablePeople = 0;
     }
 
@@ -36,7 +36,14 @@ public final class Availability {
     }
 
     public int getNumAvailablePeople() {
-        return this.numAvailablePeople.size();
+        return this.numAvailablePeople;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        Availability otherAvailability = (Availability) other;
+        return other instanceof Availability && this.time == otherAvailability.getTime();
+    }
+
 
 }
