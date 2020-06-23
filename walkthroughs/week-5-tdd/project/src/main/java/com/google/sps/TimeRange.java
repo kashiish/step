@@ -169,6 +169,19 @@ public final class TimeRange {
   }
 
   /**
+  * Gets the time range that TimeRange a and b overlap. 
+  * @return TimeRange
+  */
+  public static TimeRange getOverlappedTime(TimeRange a, TimeRange b) {
+    //get the latest start of the two
+    int newStart = Math.max(a.start(), b.start());
+    //get the earlest end of the two
+    int newEnd = Math.min(a.end(), b.end());
+
+    return TimeRange.fromStartEnd(newStart, newEnd, newEnd == TimeRange.END_OF_DAY ? true : false);
+   }
+
+  /**
    * Creates a {@code TimeRange} from {@code start} to {@code end}. Whether or not {@code end} is
    * included in the range will depend on {@code inclusive}. If {@code inclusive} is {@code true},
    * then @{code end} will be in the range.
